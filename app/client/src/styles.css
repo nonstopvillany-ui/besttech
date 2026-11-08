@@ -1,0 +1,239 @@
+/* Besttech Kft. – arculati alapszínek (a v25 ütemező színvilágából) */
+:root {
+  --navy: #173d67;
+  --navy-dark: #0f2a48;
+  --blue: #1761b4;
+  --blue-light: #5fb0ff;
+  --bg: #f2f5f9;
+  --surface: #ffffff;
+  --text: #1c2b3a;
+  --muted: #5c6f82;
+  --border: #d9e1ea;
+  --ok: #1e7a45;
+  --warn: #9a6200;
+  --error: #b42318;
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(16, 42, 72, 0.06), 0 6px 20px rgba(16, 42, 72, 0.07);
+  font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+h1, h2, h3 { color: var(--navy); line-height: 1.2; }
+h1 { font-size: clamp(1.5rem, 2.5vw, 2rem); margin: 0 0 4px; }
+h2 { font-size: 1.25rem; margin: 0 0 6px; }
+a { color: var(--blue); }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+.nowrap { white-space: nowrap; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.loading { display: grid; place-items: center; min-height: 60vh; color: var(--muted); }
+
+/* ---------- Gombok és űrlapok ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--navy); font: inherit; font-weight: 600;
+  cursor: pointer; text-decoration: none; min-height: 44px; transition: background 0.15s, box-shadow 0.15s;
+}
+.btn:hover { background: #eaf1fa; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn--primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn--primary:hover { background: #12519a; }
+.btn--ghost { background: transparent; }
+.btn--block { width: 100%; }
+.linkbtn { background: none; border: 0; color: var(--blue); font: inherit; cursor: pointer; text-decoration: underline; }
+.iconbtn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
+  border: 0; background: transparent; color: inherit; cursor: pointer;
+}
+.iconbtn:hover { background: rgba(23, 97, 180, 0.1); }
+.iconbtn:disabled { opacity: 0.35; cursor: not-allowed; }
+.iconbtn--danger { color: var(--error); }
+:focus-visible { outline: 3px solid var(--blue-light); outline-offset: 2px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field > span { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+.field input, .field select {
+  font: inherit; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px;
+  background: #fff; min-height: 44px; width: 100%;
+}
+.field input[type='color'] { padding: 4px; height: 44px; }
+.field input:focus, .field select:focus { border-color: var(--blue); outline: 3px solid rgba(23, 97, 180, 0.15); }
+.pw { position: relative; display: block; }
+.pw input { padding-right: 46px; }
+.pw__toggle { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: none; border: 0; padding: 10px; color: var(--muted); cursor: pointer; }
+
+.alert { padding: 10px 14px; border-radius: 10px; margin: 0 0 14px; font-size: 0.95rem; }
+.alert--error { background: #fdecea; color: var(--error); }
+.alert--ok { background: #e6f4ec; color: var(--ok); }
+.alert--info { background: #e8f1fb; color: var(--navy); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600; background: #eef1f5; color: var(--muted); margin-right: 4px;
+}
+.badge--dev { background: #fff4dc; color: var(--warn); }
+.badge--ok { background: #e6f4ec; color: var(--ok); }
+.badge--error { background: #fdecea; color: var(--error); }
+.badge--lg { font-size: 0.95rem; padding: 6px 14px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--border);
+  border-radius: 10px; background: #fff; cursor: pointer; margin-bottom: 8px;
+}
+
+/* ---------- Embléma ---------- */
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--navy); text-decoration: none; }
+.brand__mark { width: 36px; height: 36px; color: var(--navy); }
+.brand__text { display: flex; flex-direction: column; line-height: 1; }
+.brand__text b { font-size: 1.15rem; letter-spacing: 0.12em; }
+.brand__text small { font-size: 0.7rem; letter-spacing: 0.2em; opacity: 0.8; margin-top: 3px; }
+.brand--light { color: #fff; }
+.brand--light .brand__mark { color: rgba(255, 255, 255, 0.14); }
+.brand--lg .brand__mark { width: 52px; height: 52px; }
+.brand--lg .brand__text b { font-size: 1.6rem; }
+
+/* ---------- Bejelentkezés ---------- */
+.auth {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px;
+  background: radial-gradient(1200px 600px at 10% -10%, #2a6db5 0%, transparent 60%), linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%);
+}
+.auth__panel {
+  display: grid; grid-template-columns: 1fr 1fr; width: min(960px, 100%); background: var(--surface);
+  border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+}
+.auth__hero {
+  padding: 48px 40px; color: #fff; display: flex; flex-direction: column; justify-content: center; gap: 12px;
+  background: linear-gradient(150deg, rgba(23, 97, 180, 0.95), rgba(23, 61, 103, 0.98));
+}
+.auth__hero h1 { color: #fff; margin-top: 28px; }
+.auth__hero p { color: rgba(255, 255, 255, 0.82); margin: 0; }
+.auth__card { padding: 48px 40px; }
+.auth__card h2 { font-size: 1.5rem; margin-bottom: 20px; }
+.auth__link { text-align: center; margin: 16px 0 0; }
+.auth__foot { color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; margin-top: 18px; }
+
+/* ---------- Váz ---------- */
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+  padding: 10px clamp(12px, 3vw, 32px); background: var(--navy); color: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+.topbar__home { text-decoration: none; }
+.topbar__right { display: flex; align-items: center; gap: 6px; }
+.topbar__right .iconbtn { color: #fff; }
+.topbar__right .iconbtn:hover { background: rgba(255, 255, 255, 0.12); }
+.topbar__user { display: flex; flex-direction: column; text-align: right; margin: 0 6px; line-height: 1.2; }
+.topbar__user small { opacity: 0.7; font-size: 0.75rem; }
+.content { flex: 1; width: min(1240px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 32px); }
+.footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 18px; }
+
+/* ---------- Főoldal (mozaik) ---------- */
+.dashboard__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.dashboard__head p { margin: 0; }
+.dashboard__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: clamp(12px, 2vw, 20px); }
+.tile {
+  --tile-color: var(--blue);
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  min-height: 190px; padding: 24px; border-radius: var(--radius); background: var(--surface);
+  color: var(--text); text-decoration: none; box-shadow: var(--shadow); border: 1px solid transparent;
+  overflow: hidden; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.tile::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--tile-color); }
+.tile:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(16, 42, 72, 0.14); border-color: color-mix(in srgb, var(--tile-color) 35%, transparent); }
+.tile__icon {
+  display: grid; place-items: center; width: 68px; height: 68px; border-radius: 18px; margin-bottom: 8px;
+  color: var(--tile-color); background: color-mix(in srgb, var(--tile-color) 12%, white);
+}
+.tile__icon--lg { width: 96px; height: 96px; border-radius: 24px; }
+.tile__title { font-size: 1.2rem; font-weight: 700; color: var(--navy); }
+.tile__desc { color: var(--muted); font-size: 0.92rem; }
+.tile__ext { position: absolute; top: 18px; right: 18px; color: var(--muted); }
+.tile--dev .tile__icon { filter: saturate(0.6); }
+.tile .badge { margin-top: auto; }
+
+/* ---------- Fejlesztés alatt oldal ---------- */
+.placeholder { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.placeholder__card {
+  align-self: stretch; text-align: center; background: var(--surface); border-radius: 24px; padding: 48px 24px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+
+/* ---------- Adminisztráció ---------- */
+.admin__head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.admin__head h1 { margin: 0; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.tabs button {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border: 0; background: none; font: inherit;
+  font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; min-height: 44px;
+}
+.tabs button.is-on { color: var(--blue); border-bottom-color: var(--blue); }
+.panel { background: var(--surface); border-radius: var(--radius); padding: clamp(16px, 3vw, 28px); box-shadow: var(--shadow); }
+.section-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 14px; }
+.section-head p { margin: 0; max-width: 640px; }
+.narrow { max-width: 520px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+
+.tilelist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.tilelist__item {
+  --tile-color: var(--blue);
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border);
+  border-left: 5px solid var(--tile-color); border-radius: 12px; background: #fff;
+}
+.tilelist__item.is-hidden { opacity: 0.55; background: #f7f9fb; }
+.tilelist__item.is-drag { outline: 2px dashed var(--blue); }
+.tilelist__grip { color: var(--muted); cursor: grab; }
+.tilelist__icon { color: var(--tile-color); display: grid; }
+.tilelist__main { flex: 1; display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.tilelist__main small { overflow-wrap: anywhere; }
+.tilelist__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; }
+
+.iconpick { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
+.iconpick button { height: 44px; border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; color: var(--navy); }
+.iconpick button.is-on { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+.modal { position: fixed; inset: 0; z-index: 50; background: rgba(15, 42, 72, 0.5); display: grid; place-items: center; padding: 16px; }
+.modal__card { width: min(620px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 18px; padding: 22px; }
+.modal__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.modal__head h3 { margin: 0; }
+.modal__foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+
+.tablewrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+.table th { text-align: left; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 2px solid var(--border); }
+.table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.table tr.is-off td { opacity: 0.55; }
+
+/* ---------- Mobil ---------- */
+@media (max-width: 760px) {
+  .auth__panel { grid-template-columns: 1fr; }
+  .auth__hero { padding: 28px 24px; }
+  .auth__hero h1 { margin-top: 12px; font-size: 1.3rem; }
+  .auth__hero p { display: none; }
+  .auth__card { padding: 28px 24px; }
+  .topbar__user { display: none; }
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .tile { min-height: 150px; padding: 16px; }
+  .tile__icon { width: 52px; height: 52px; border-radius: 14px; }
+  .tile__title { font-size: 1rem; }
+  .tile__desc { display: none; }
+  .grid2 { grid-template-columns: 1fr; }
+  .table thead { display: none; }
+  .table tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  .table td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 4px 6px; }
+  .table td[data-label]::before { content: attr(data-label); font-weight: 600; color: var(--muted); }
+  .tabs button span { display: none; }
+  .tilelist__item { flex-wrap: wrap; }
+  .tilelist__actions { width: 100%; }
+}
+@media (max-width: 360px) {
+  .tiles { grid-template-columns: 1fr; }
+}
