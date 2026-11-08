@@ -1,6 +1,6 @@
 # Besttech – Építési ütemező
 
-**Verzió: v23** · © 2026 Besttech Kft. Az oldal a Besttech Kft. tulajdona.
+**Verzió: v25** · © 2026 Besttech Kft. Az oldal a Besttech Kft. tulajdona.
 
 A Besttech Kft. belső ütemező oldala komplett házépítéshez: a munkafolyamatok ütemezése projektenként, a dolgozók beosztása, az ütközések figyelése, az esti e-mail előnézete, a bérezés és az alvállalkozói elszámolás.
 
@@ -8,9 +8,8 @@ A Besttech Kft. belső ütemező oldala komplett házépítéshez: a munkafolyam
 
 | Fájl | Mi van benne |
 |---|---|
-| `index.html` | az oldal szerkezete |
-| `css/style.css` | a kinézet |
-| `js/app.js` | a teljes működés |
+| `index.html` | a teljes oldal egy fájlban (kinézet és működés is) – ezt kell feltölteni |
+| `forras/style.css`, `forras/app.js` | ugyanez szétbontva, fejlesztéshez |
 | `render.yaml` | beállítás a Render.com statikus oldalához |
 
 ## Nézetek
