@@ -59,3 +59,5 @@ dialog{border:0;border-radius:14px;width:min(580px,94vw);box-shadow:0 15px 60px 
 .plan td{font-size:14px}.plan .free{color:#c0392b;font-weight:700}
 @media(max-width:1050px){.layout{grid-template-columns:1fr}}
 @media print{body{background:#fff}.sheet{max-width:none!important;box-shadow:none}header,.toolbar,.noprint{display:none!important}.sheet{margin:0;padding:0}}
+.brick.past{width:60%;padding:3px 10px;font-size:11px;min-height:0;box-shadow:none;background:repeating-linear-gradient(135deg,#6f9a7c,#6f9a7c 10px,#7aa686 10px,#7aa686 20px)}
+.pastBtn{white-space:nowrap;margin-top:4px;padding:2px 7px;font-size:11px;background:#e3f3e8;color:#1e6b38;border-radius:6px}.pastBtn:hover{background:#c9ebd3}
