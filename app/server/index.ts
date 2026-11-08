@@ -6,7 +6,7 @@ import { runMigrations } from './lib/migrate.js';
 import { purgeExpiredSessions } from './security/session.js';
 
 const config = loadConfig();
-const db = createPool(config.databaseUrl);
+const db = createPool(config.databaseUrl, config.dbSchema);
 const app = await buildApp({ config, db });
 
 // A migráció a preDeployCommand-ban is lefut; itt biztonsági okból újra ellenőrizzük

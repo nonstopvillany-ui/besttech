@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type { Db } from '../db.js';
+import { ALL_PERMISSIONS } from '../lib/permissions.js';
 
 export const SESSION_COOKIE = 'bt_session';
 
@@ -11,6 +12,7 @@ export interface SessionUser {
   roleName: string;
   isAdmin: boolean;
   mustChangePassword: boolean;
+  permissions: string[];
 }
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -32,7 +34,8 @@ export async function getSessionUser(db: Db, token: string | undefined): Promise
     `UPDATE sessions s SET last_seen_at = now()
        FROM users u JOIN roles r ON r.key = u.role_key
       WHERE s.id_hash = $1 AND s.user_id = u.id AND s.expires_at > now() AND u.is_active
-      RETURNING u.id, u.email, u.name, u.role_key, r.name AS role_name, r.is_admin, u.must_change_password`,
+      RETURNING u.id, u.email, u.name, u.role_key, r.name AS role_name, r.is_admin, u.must_change_password,
+                ARRAY(SELECT permission FROM role_permissions rp WHERE rp.role_key = u.role_key ORDER BY 1) AS permissions`,
     [hashToken(token)],
   );
   const u = rows[0];
@@ -40,6 +43,7 @@ export async function getSessionUser(db: Db, token: string | undefined): Promise
   return {
     id: Number(u.id), email: u.email, name: u.name, roleKey: u.role_key, roleName: u.role_name,
     isAdmin: u.is_admin, mustChangePassword: u.must_change_password,
+    permissions: u.is_admin ? [...ALL_PERMISSIONS] : u.permissions,
   };
 }
 

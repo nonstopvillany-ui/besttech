@@ -15,6 +15,8 @@ import { authRoutes } from './routes/auth.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { adminRoutes } from './routes/admin.js';
 import { legacyRoutes } from './routes/legacy.js';
+import { registryRoutes } from './routes/registry.js';
+import { schedulerRoutes } from './routes/scheduler.js';
 
 export interface BuildOptions {
   config: AppConfig;
@@ -71,7 +73,7 @@ export async function buildApp({ config, db, logger = true }: BuildOptions) {
   });
 
   app.setErrorHandler((err: unknown, req: FastifyRequest, reply: FastifyReply) => {
-    if (err instanceof HttpError) return reply.code(err.statusCode).send({ error: err.message, code: err.code });
+    if (err instanceof HttpError) return reply.code(err.statusCode).send({ error: err.message, code: err.code, ...err.details });
     if (err instanceof ZodError) return reply.code(400).send({ error: err.issues[0]?.message ?? 'Hibás adat.', code: 'VALIDATION' });
     const e = err as { statusCode?: number; message?: string; code?: string };
     if (e.statusCode === 429) return reply.code(429).send({ error: 'Túl sok próbálkozás. Próbáld újra néhány perc múlva.', code: 'RATE_LIMIT' });
@@ -93,6 +95,8 @@ export async function buildApp({ config, db, logger = true }: BuildOptions) {
   await app.register(dashboardRoutes, { db });
   await app.register(adminRoutes, { db });
   await app.register(legacyRoutes, { db, config });
+  await app.register(registryRoutes, { db });
+  await app.register(schedulerRoutes, { db });
 
   // A lefordított React-felület kiszolgálása (production build esetén)
   const here = path.dirname(fileURLToPath(import.meta.url));
@@ -100,6 +104,12 @@ export async function buildApp({ config, db, logger = true }: BuildOptions) {
   const hasClient = existsSync(path.join(clientDir, 'index.html'));
   if (hasClient) {
     await app.register(fastifyStatic, { root: clientDir, wildcard: false, index: false });
+  }
+  // A v26 ütemező külön oldal (a v25 megszokott felülete), a többi útvonal a React-alkalmazásé
+  if (hasClient) {
+    const scheduler = (_req: FastifyRequest, reply: FastifyReply) => reply.header('cache-control', 'no-cache').sendFile('utemezo/index.html');
+    app.get('/utemezo', scheduler);
+    app.get('/utemezo/', scheduler);
   }
   app.setNotFoundHandler((req, reply) => {
     if (req.url.startsWith('/api/') || req.method !== 'GET' || !hasClient)

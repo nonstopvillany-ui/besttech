@@ -3,7 +3,7 @@ import { loadConfig } from '../config.js';
 import { createPool } from '../db.js';
 import { runMigrations } from '../lib/migrate.js';
 
-const db = createPool(loadConfig().databaseUrl);
+const db = (() => { const c = loadConfig(); return createPool(c.databaseUrl, c.dbSchema); })();
 try {
   await runMigrations(db);
 } catch (err) {

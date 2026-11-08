@@ -43,8 +43,13 @@ export async function commitLegacyImport(db: Db, rawText: string, fileName: stri
     // dolgozók
     const wId = new Map<string, number>();
     for (const w of data.workers) {
+      // Név szerint egyeztetve: ha a dolgozó már létezik (pl. az ütemezőben felvették), frissítjük
       const r = await c.query(
-        `INSERT INTO workers (name, role, email, hourly_wage, is_active, legacy_name) VALUES ($1, $2, $3, $4, $5, $1) RETURNING id`,
+        `INSERT INTO workers (name, role, email, hourly_wage, is_active, legacy_name) VALUES ($1, $2, $3, $4, $5, $1)
+         ON CONFLICT ((lower(name))) DO UPDATE SET role = EXCLUDED.role, email = EXCLUDED.email,
+           hourly_wage = COALESCE(EXCLUDED.hourly_wage, workers.hourly_wage), is_active = workers.is_active OR EXCLUDED.is_active,
+           legacy_name = EXCLUDED.legacy_name, updated_at = now()
+         RETURNING id`,
         [w.name, w.role, w.email, w.hourlyWage, w.inRoster],
       );
       wId.set(w.key, Number(r.rows[0].id));
@@ -54,25 +59,33 @@ export async function commitLegacyImport(db: Db, rawText: string, fileName: stri
     const tplId = new Map<string, number>();
     for (const t of data.templates) {
       const r = await c.query(
-        `INSERT INTO task_templates (name, category_id, default_days, sort_order, source) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-        [t.name, catId.get(t.category), t.days, t.sortOrder, t.source],
+        `INSERT INTO task_templates (name, category_id, default_days, sort_order, source, notes, default_lead_id) VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (name) DO UPDATE SET category_id = EXCLUDED.category_id, default_days = EXCLUDED.default_days,
+           notes = EXCLUDED.notes, default_lead_id = EXCLUDED.default_lead_id, is_active = true
+         RETURNING id`,
+        [t.name, catId.get(t.category), t.days, t.sortOrder, t.source, t.notes ?? '', W(t.leadKey ?? null)],
       );
-      tplId.set(t.name, Number(r.rows[0].id));
+      const tid = Number(r.rows[0].id);
+      tplId.set(t.name, tid);
+      await c.query('DELETE FROM task_template_workers WHERE template_id = $1', [tid]);
+      if (t.workerKeys?.length)
+        await c.query('INSERT INTO task_template_workers (template_id, worker_id) SELECT $1, unnest($2::bigint[]) ON CONFLICT DO NOTHING', [tid, t.workerKeys.map(W)]);
     }
     // projektek, munkák, szakaszok, napok
     const projId = new Map<number, number>();
     for (const p of data.projects) {
       const r = await c.query(
-        `INSERT INTO projects (name, hrsz, legacy_import_id, legacy_index, sort_order) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-        [p.name, p.hrsz, iid, p.legacyIndex, (p.legacyIndex + 1) * 10],
+        `INSERT INTO projects (name, hrsz, legacy_import_id, legacy_index, sort_order, scheduler_initialized, created_by)
+         VALUES ($1, $2, $3, $4, (SELECT COALESCE(max(sort_order), 0) + 10 FROM projects), true, $5) RETURNING id`,
+        [p.name, p.hrsz, iid, p.legacyIndex, userId],
       );
       const pid = Number(r.rows[0].id);
       projId.set(p.legacyIndex, pid);
       for (const t of p.tasks) {
         const tr = await c.query(
-          `INSERT INTO project_tasks (project_id, template_id, name, category_id, lead_worker_id, notes, status, planned_days, sort_order, legacy_id)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
-          [pid, t.templateName ? tplId.get(t.templateName) ?? null : null, t.name, catId.get(t.category), W(t.leadKey), t.notes, t.status, t.plannedDays, t.sortOrder, t.legacyId],
+          `INSERT INTO project_tasks (project_id, template_id, name, category_id, lead_worker_id, notes, status, planned_days, base_days, position, sort_order, legacy_id)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
+          [pid, t.templateName ? tplId.get(t.templateName) ?? null : null, t.name, catId.get(t.category), W(t.leadKey), t.notes, t.status, t.plannedDays, t.baseDays, t.position, t.sortOrder, t.legacyId],
         );
         const tid = Number(tr.rows[0].id);
         if (t.workerKeys.length)

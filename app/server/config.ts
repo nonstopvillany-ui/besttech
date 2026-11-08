@@ -1,6 +1,8 @@
 // Környezeti változók beolvasása és ellenőrzése egy helyen.
 export interface AppConfig {
   databaseUrl: string;
+  /** Saját PostgreSQL-séma: más alkalmazások tábláival nem ütközhet */
+  dbSchema: string;
   port: number;
   host: string;
   isProduction: boolean;
@@ -18,8 +20,11 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const databaseUrl = env.DATABASE_URL;
   if (!databaseUrl) throw new Error('Hiányzik a DATABASE_URL környezeti változó.');
   const ttl = Number(env.SESSION_TTL_HOURS ?? 168);
+  const dbSchema = env.DB_SCHEMA ?? 'besttech_app';
+  if (!/^[a-z_][a-z0-9_]{0,40}$/.test(dbSchema)) throw new Error('Érvénytelen DB_SCHEMA.');
   return {
     databaseUrl,
+    dbSchema,
     port: Number(env.PORT ?? 3000),
     host: env.HOST ?? '0.0.0.0',
     isProduction: env.NODE_ENV === 'production',

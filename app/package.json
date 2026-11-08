@@ -17,6 +17,8 @@
     "migrate:dev": "tsx server/cli/migrate.ts",
     "create-admin": "node dist/server/cli/create-admin.js",
     "create-admin:dev": "tsx server/cli/create-admin.ts",
+    "db:inspect": "node dist/server/cli/db-inspect.js",
+    "db:inspect:dev": "tsx server/cli/db-inspect.ts",
     "legacy:check": "tsx server/cli/legacy-check.ts",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.json --noEmit",
     "test": "vitest run"

@@ -43,7 +43,7 @@ if (!values.email) {
   process.exit(1);
 }
 
-const db = createPool(loadConfig().databaseUrl);
+const db = (() => { const c = loadConfig(); return createPool(c.databaseUrl, c.dbSchema); })();
 try {
   await runMigrations(db, () => {});
   let password = process.env.ADMIN_PASSWORD ?? '';

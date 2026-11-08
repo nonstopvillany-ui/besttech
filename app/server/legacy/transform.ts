@@ -51,14 +51,14 @@ export interface NWorker { key: string; name: string; role: 'lead' | 'helper' | 
 export interface NDay { date: string; done: boolean; note: string; overrideWorkers: string[] | null }
 export interface NTask {
   legacyId: number; name: string; category: string; leadKey: string | null; workerKeys: string[]; notes: string;
-  status: 'unscheduled' | 'scheduled' | 'done' | 'past_done'; plannedDays: number; sortOrder: number;
+  status: 'unscheduled' | 'scheduled' | 'done' | 'past_done'; plannedDays: number; baseDays: number; position: number; sortOrder: number;
   templateName: string | null; segments: Array<{ seq: number; start: string; workdays: number }>; days: NDay[];
 }
 export interface NProject { legacyIndex: number; name: string; hrsz: string | null; tasks: NTask[] }
 export interface NormalizedImport {
   categories: Array<{ name: string; color: string; sortOrder: number }>;
   workers: NWorker[];
-  templates: Array<{ name: string; category: string; days: number; source: 'seed' | 'custom'; sortOrder: number }>;
+  templates: Array<{ name: string; category: string; days: number; source: 'seed' | 'custom'; sortOrder: number; notes?: string; leadKey?: string | null; workerKeys?: string[] }>;
   projects: NProject[];
   hours: Array<{ workerKey: string; date: string; from: string; to: string }>;
   conflictAcks: Array<{ workerKey: string; date: string }>;
@@ -133,7 +133,12 @@ export function transformLegacy(input: unknown): { data: NormalizedImport; repor
   S.custom.forEach((c, i) => {
     if (tplNames.has(c.name)) return;
     tplNames.add(c.name);
-    templates.push({ name: c.name, days: segDays(c.days), category: cat(c.category ?? 'Egyéb'), source: 'custom', sortOrder: 1000 + i * 10 });
+    const cc = c as { lead?: string | null; workers?: string[]; notes?: string | null };
+    templates.push({
+      name: c.name, days: segDays(c.days), category: cat(c.category ?? 'Egyéb'), source: 'custom', sortOrder: 1000 + i * 10,
+      notes: (cc.notes ?? '').trim(), leadKey: ref(cc.lead, `sablon: ${c.name}`),
+      workerKeys: [...new Set((cc.workers ?? []).map((w) => ref(w, `sablon: ${c.name}`)).filter((x): x is string => !!x))],
+    });
   });
 
   // ---- projektek és munkák
@@ -189,12 +194,27 @@ export function transformLegacy(input: unknown): { data: NormalizedImport; repor
 
       tasks.push({
         legacyId: t.id, name: t.name, category: cat(t.category), leadKey, workerKeys, notes: (t.notes ?? '').trim(),
-        status, plannedDays: status === 'past_done' || status === 'unscheduled' ? segDays(t.days) : totalDays(t), sortOrder: t.order || ti,
+        status, plannedDays: status === 'past_done' || status === 'unscheduled' ? segDays(t.days) : totalDays(t),
+        baseDays: segDays(t.days), position: ti, sortOrder: t.order ?? 0,
         templateName: tplNames.has(t.name) ? t.name : null, segments, days,
       });
     });
     return { legacyIndex: hi, name: h.name.trim(), hrsz: extractHrsz(h.name), tasks };
   });
+  // A beépített sablonok alapértelmezett csapata: a projektekben leggyakoribb felelős + csapat
+  // (a v25 kódjában lévő alapértelmezés nincs benne a mentésfájlban, így az adatokból állítjuk vissza)
+  for (const tpl of templates) {
+    if (tpl.source !== 'seed') continue;
+    const freq = new Map<string, { n: number; lead: string | null; workers: string[] }>();
+    for (const p of projects) for (const t of p.tasks) if (t.name === tpl.name) {
+      const k = JSON.stringify([t.leadKey, t.workerKeys]);
+      const e = freq.get(k) ?? { n: 0, lead: t.leadKey, workers: t.workerKeys };
+      e.n++; freq.set(k, e);
+    }
+    const best = [...freq.values()].sort((a, b) => b.n - a.n)[0];
+    if (best) { tpl.leadKey = best.lead; tpl.workerKeys = best.workers; }
+  }
+
   const names = new Map<string, number>();
   projects.forEach((p) => names.set(p.name, (names.get(p.name) ?? 0) + 1));
   for (const [n, c] of names) if (c > 1) warn('DUPLICATE_PROJECT_NAME', `Azonos nevű projektek (${c} db): ${n}`);

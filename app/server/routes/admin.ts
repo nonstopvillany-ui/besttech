@@ -7,6 +7,7 @@ import { audit } from '../lib/audit.js';
 import { emailSchema, ICONS, targetProblem, tileSchema } from '../lib/validate.js';
 import { hashPassword, passwordProblem } from '../security/password.js';
 import { deleteUserSessions } from '../security/session.js';
+import { ALL_PERMISSIONS, isPermission, PERMISSIONS } from '../lib/permissions.js';
 import { mapTile, TILE_SELECT } from './dashboard.js';
 
 const idParam = z.object({ id: z.coerce.number().int().positive() });
@@ -134,8 +135,34 @@ export const adminRoutes: FastifyPluginAsync<{ db: Db }> = async (app, { db }) =
 
   // ---------------------------------------------------------- Szerepkörök
   app.get('/api/admin/roles', async () => {
-    const { rows } = await db.query('SELECT key, name, description, is_admin, is_system FROM roles ORDER BY sort_order, key');
-    return { roles: rows.map((r) => ({ key: r.key, name: r.name, description: r.description, isAdmin: r.is_admin, isSystem: r.is_system })) };
+    const { rows } = await db.query(
+      `SELECT key, name, description, is_admin, is_system,
+              ARRAY(SELECT permission FROM role_permissions rp WHERE rp.role_key = r.key ORDER BY 1) AS permissions
+         FROM roles r ORDER BY sort_order, key`);
+    return {
+      roles: rows.map((r) => ({ key: r.key, name: r.name, description: r.description, isAdmin: r.is_admin, isSystem: r.is_system, permissions: r.is_admin ? ALL_PERMISSIONS : r.permissions })),
+      permissions: Object.entries(PERMISSIONS).map(([key, label]) => ({ key, label })),
+    };
+  });
+
+  // Egy szerepkör jogainak beállítása (az Adminisztrátor jogai nem módosíthatók: mindig teljes)
+  app.put('/api/admin/roles/:key/permissions', async (req) => {
+    const admin = requireAdmin(req);
+    const { key } = z.object({ key: z.string().max(40) }).parse(req.params);
+    const { permissions } = z.object({ permissions: z.array(z.string()).max(50) }).parse(req.body);
+    if (!permissions.every(isPermission)) throw new HttpError(400, 'Ismeretlen jogosultság.', 'VALIDATION');
+    const role = await db.query('SELECT is_admin FROM roles WHERE key = $1', [key]);
+    if (!role.rows[0]) throw new HttpError(404, 'A szerepkör nem található.', 'NOT_FOUND');
+    if (role.rows[0].is_admin) throw new HttpError(400, 'Az Adminisztrátor jogai nem módosíthatók.', 'VALIDATION');
+    // A szerkesztési jog mellé a megtekintés is jár
+    const set = new Set<string>(permissions);
+    for (const p of [...set]) if (p.endsWith('.edit') || p === 'scheduler.finance') set.add(p.replace(/\.(edit|finance)$/, '.view'));
+    await withTransaction(db, async (c) => {
+      await c.query('DELETE FROM role_permissions WHERE role_key = $1', [key]);
+      if (set.size) await c.query('INSERT INTO role_permissions (role_key, permission) SELECT $1, unnest($2::text[])', [key, [...set]]);
+    });
+    await audit(db, admin.id, 'role_permissions_updated', 'role', key, { permissions: [...set] }, req.ip);
+    return { ok: true, permissions: [...set].sort() };
   });
 
   // --------------------------------------------------------- Felhasználók

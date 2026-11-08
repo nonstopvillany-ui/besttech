@@ -98,7 +98,7 @@ describe('bejelentkezés', () => {
     const titles = dash.json().tiles.map((t: { title: string }) => t.title);
     expect(titles).toEqual(['Építési ütemező', 'Projektek', 'Ügyfelek', 'Dokumentumok', 'Hírlevél', 'Állítsd össze a házad!', 'Raktárkészlet', 'Adminisztráció']);
     const ready = dash.json().tiles.filter((t: { ready: boolean }) => t.ready).map((t: { title: string }) => t.title);
-    expect(ready).toEqual(['Adminisztráció']);
+    expect(ready).toEqual(['Építési ütemező', 'Projektek', 'Ügyfelek', 'Adminisztráció']);
   });
   it('a régi jelszó már nem működik', async () => {
     expect((await login(app, ADMIN, TEMP)).res.statusCode).toBe(401);

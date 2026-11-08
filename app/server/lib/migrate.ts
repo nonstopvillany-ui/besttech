@@ -16,6 +16,11 @@ export async function runMigrations(db: Db, log: (msg: string) => void = console
   const applied: string[] = [];
   try {
     await client.query('SELECT pg_advisory_lock(727274)');
+    // A saját séma (search_path) létrehozása, ha még nincs – más sémához nem nyúlunk
+    const { rows: sp } = await client.query<{ s: string }>('SELECT current_setting(\'search_path\') AS s');
+    const schema = sp[0].s.split(',')[0].trim().replace(/"/g, '');
+    if (!/^[a-z_][a-z0-9_]{0,40}$/.test(schema)) throw new Error(`Váratlan search_path: ${sp[0].s}`);
+    await client.query(`CREATE SCHEMA IF NOT EXISTS ${schema}`);
     await client.query(`CREATE TABLE IF NOT EXISTS schema_migrations (
       name text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())`);
     const done = new Set((await client.query<{ name: string }>('SELECT name FROM schema_migrations')).rows.map((r) => r.name));
