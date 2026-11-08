@@ -1,5 +1,7 @@
 # Besttech – Építési ütemező
 
+**Verzió: v23** · © 2026 Besttech Kft. Az oldal a Besttech Kft. tulajdona.
+
 A Besttech Kft. belső ütemező oldala komplett házépítéshez: a munkafolyamatok ütemezése projektenként, a dolgozók beosztása, az ütközések figyelése, az esti e-mail előnézete, a bérezés és az alvállalkozói elszámolás.
 
 ## Fájlok
@@ -13,6 +15,7 @@ A Besttech Kft. belső ütemező oldala komplett házépítéshez: a munkafolyam
 
 ## Nézetek
 
+- **Korábban elkészült munkák:** a munkák listája fölötti gombbal bepipálható, mi volt már kész az ütemezés kezdete előtt. Ezeknél nem kell dátum és dolgozó.
 - **Toronynézet:** van 10 napos, 30 napos, teljes torony és havi nézet, valamint dolgozónkénti nézet munkaidővel. A munkát a bal oldali listából a megfelelő napra kell húzni.
 - **Napi terv:** egy napot mutat. Látszik, ki hol dolgozik, és ki szabad még.
 - **Összesítő naptár:** projektenként egy oszlop.

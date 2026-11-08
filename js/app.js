@@ -1,3 +1,4 @@
+const APP_VERSION='v23';
 const CATS={'Szerkezetépítés':'#2379bd','Gépészet':'#2b9658','Tető':'#8c56bd','Festés':'#b46c29','Homlokzat':'#609d35','Burkolás':'#c49a25','Szerelvényezés':'#1b8a8f','Egyéb':'#637c90'};
 const PALETTE=['#c0392b','#16a085','#7f8c2d','#a0527a','#2c6e9b','#d35400','#5b6bc0','#8a6d3b'];
 const ROLES={lead:'Munkafelelős',helper:'Segéd',sub:'Alvállalkozó'};
@@ -284,6 +285,12 @@ $('addHouse').onclick=()=>{const n=prompt('Új projekt neve:')?.trim();if(n){S.h
 $('renHouse').onclick=()=>{const n=prompt('Projekt új neve:',H().name)?.trim();if(n){H().name=n;render()}};
 $('delHouse').onclick=()=>{if(S.houses.length<2)return alert('Legalább egy projektnek maradnia kell.');if(confirm(H().name+' törlése az összes munkájával együtt?')){S.houses.splice(cur,1);cur=0;sel=null;render()}};
 $('addTask').onclick=()=>openEditor(null);
+$('pastBulk').onclick=()=>{const list=H().tasks.filter(t=>!t.placed);if(!list.length)return alert('Nincs a listában munka, ami még nincs a toronyban.');
+ $('pastList').innerHTML=list.map(t=>`<label class="chip" style="display:flex;margin:4px 0;padding:7px;border-left:5px solid ${CATS[t.category]}"><input type="checkbox" value="${t.id}"> ${esc(t.name)}</label>`).join('');$('pastDlg').showModal()};
+$('pastAll').onclick=()=>$('pastList').querySelectorAll('input').forEach(i=>i.checked=true);
+$('pastNone').onclick=()=>$('pastList').querySelectorAll('input').forEach(i=>i.checked=false);
+$('pastCancel').onclick=()=>$('pastDlg').close();
+$('pastOk').onclick=()=>{const ids=[...$('pastList').querySelectorAll('input:checked')].map(i=>+i.value);ids.forEach(id=>markPast(T(id)));$('pastDlg').close();tmode='all';render()};
 $('resetAll').onclick=()=>{if(confirm('Minden projekt és beosztás törlődik, és az ütemező alaphelyzetből indul. Biztos?')){localStorage.removeItem(KEY);location.reload()}};
 $('restore').onclick=()=>{const have=new Set(H().tasks.map(t=>t.name));const miss=newTasks(S.custom).filter(t=>!have.has(t.name));if(!miss.length)return alert('Egyik alapmunka sem hiányzik.');let id=Math.max(0,...H().tasks.map(x=>x.id));miss.forEach(t=>{t.id=++id;H().tasks.push(t)});alert(miss.length+' munka visszaállítva: '+miss.map(t=>t.name).join(', '));render()};
 $('export').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));a.download='besttech-utemezo-mentes.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
