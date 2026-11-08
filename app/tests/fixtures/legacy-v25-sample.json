@@ -1,0 +1,41 @@
+{
+  "houses": [
+    {
+      "name": "Minta Projekt HRSZ_1234_5",
+      "tasks": [
+        { "id": 1, "name": "Humusz leszedés", "category": "Szerkezetépítés", "days": 2, "start": "2026-03-07", "extra": [], "lead": "Teszt Elek", "workers": ["Teszt Elek", "Minta Mária"], "notes": "", "placed": true, "order": 1, "done": [true, true, true] },
+        { "id": 2, "name": "Főfalazás", "category": "Szerkezetépítés", "days": 2, "start": "2026-03-10", "extra": [{ "start": "2026-03-20", "days": 1 }], "lead": "Teszt Elek", "workers": ["Teszt Elek"], "notes": "Figyelni a koszorúra", "placed": true, "order": 2, "done": [true, false, true],
+          "dayWorkers": { "2026-03-11": ["Teszt Elek", "Ismeretlen Ivó"] },
+          "dayNotes": { "2026-03-20": "Zsalut hozni", "2026-04-01": "Árva megjegyzés" } },
+        { "id": 3, "name": "Tető (szerkezet, héjazat, bádog)", "category": "Tető", "days": 15, "start": "", "extra": [], "lead": "Alváll Aladár", "workers": ["Alváll Aladár"], "notes": "", "placed": true, "past": true, "order": 0, "done": [] },
+        { "id": 4, "name": "Saját munka", "category": "Egyéni kat", "days": 3, "start": "", "extra": [], "lead": "", "workers": [], "notes": "", "placed": false, "order": 0, "done": [] },
+        { "id": 5, "name": "Válaszfalazás", "category": "Szerkezetépítés", "days": 2, "start": "", "extra": [], "lead": "Teszt Elek", "workers": [], "notes": "", "placed": true, "order": 3, "done": [] }
+      ]
+    },
+    {
+      "name": "Próba Béla HRSZ_1234-5",
+      "tasks": [
+        { "id": 1, "name": "Kitűzés, alapásás", "category": "Szerkezetépítés", "days": 1, "start": "2026-03-09", "extra": [], "lead": "Teszt Elek", "workers": ["Minta Mária"], "notes": "", "placed": true, "order": 1, "done": [] }
+      ]
+    }
+  ],
+  "roster": [
+    { "name": "Teszt Elek", "role": "lead", "email": "teszt.elek@example.invalid", "wage": 3000 },
+    { "name": "Minta Mária", "role": "helper", "email": "", "wage": 2000 },
+    { "name": "Alváll Aladár", "role": "sub", "email": "" }
+  ],
+  "custom": [{ "name": "Saját munka", "category": "Egyéni kat", "days": 3, "lead": "", "workers": [], "notes": "" }],
+  "ignored": { "Teszt Elek|2026-03-09": true },
+  "hours": { "Teszt Elek|2026-03-10": { "from": "07:00", "to": "15:00" }, "hibás kulcs": { "from": "07:00", "to": "15:00" } },
+  "payItems": [
+    { "id": 1, "w": "Teszt Elek", "ym": "2026-03", "amount": 50000, "note": "prémium", "recurring": true },
+    { "id": 2, "w": "Minta Mária", "ym": "2026-03", "amount": -10000, "note": "előleg", "recurring": false }
+  ],
+  "subPays": [
+    { "id": 3, "w": "Alváll Aladár", "date": "2026-03-15", "project": "Minta Projekt HRSZ_1234_5", "work": "Tető", "amount": 250000, "note": "" },
+    { "id": 4, "w": "Alváll Aladár", "date": "2026-03-16", "project": "Nem létező projekt", "work": "Bádogozás", "amount": 1000, "note": "" }
+  ],
+  "cats": { "Egyéni kat": "#123456" },
+  "mailTime": "19:00",
+  "v14": true
+}

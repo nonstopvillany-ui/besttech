@@ -19,6 +19,19 @@ Az új, moduláris webalkalmazás. Tervezett éles cím: **https://app.besttech.
   felhasználók létrehozása, szerkesztése, letiltása, ideiglenes jelszó; főoldal-beállítások; eseménynapló
 - Mobil- és asztali nézet
 
+## Régi ütemező (v25) adatainak importja – előkészítve
+
+- `migrations/002_scheduler_and_legacy_import.sql`: az ütemező adatmodellje (projektek, munkafázisok,
+  szakaszok, dátum szerinti munkanapok, dolgozók, sablonok, bértételek, kifizetések, munkaidő,
+  ütközés-tudomásulvétel) és a `legacy_imports` tábla az eredeti JSON változatlan megőrzésére.
+- `server/legacy/`: a v25 dátumszámításának pontos átirata (`calc.ts`), a JSON ellenőrzése és
+  átalakítása (`transform.ts`), az adatbázisba író, egy tranzakciós importáló (`importer.ts`).
+- Admin → **Régi adatok** fül: mentésfájl feltöltése → **előnézet** (nem ír adatbázisba):
+  darabszámok, ellenőrző összegek, adathibák listája.
+- A **tényleges import alapból tiltva**; csak `LEGACY_IMPORT_ENABLED=true` mellett, „IMPORTÁLÁS”
+  megerősítéssel, egyszer futtatható. **Valódi adatot eddig senki nem importált.**
+- Parancssori ellenőrzés adatbázis nélkül: `npm run legacy:check -- mentes.json`
+
 ## Technológia
 
 Node.js 22 · TypeScript · Fastify · PostgreSQL (`pg`, saját SQL-migrációk) · React 19 + Vite · Vitest

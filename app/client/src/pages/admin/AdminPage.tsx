@@ -1,18 +1,19 @@
-import { ArrowLeft, History, LayoutGrid, Settings, Shield, Users } from 'lucide-react';
+import { ArrowLeft, DatabaseBackup, History, LayoutGrid, Settings, Shield, Users } from 'lucide-react';
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { api, ApiError, type Role } from '../../api';
+import { LegacyImport } from './LegacyImport';
 import { TilesAdmin } from './TilesAdmin';
 import { UsersAdmin } from './UsersAdmin';
 
-type Tab = 'tiles' | 'users' | 'roles' | 'settings' | 'audit';
+type Tab = 'tiles' | 'users' | 'roles' | 'settings' | 'import' | 'audit';
 
 const ACTIONS: Record<string, string> = {
   login: 'Bejelentkezés', logout: 'Kijelentkezés', login_failed: 'Sikertelen belépés', password_changed: 'Jelszócsere',
   password_reset_requested: 'Új jelszót kért', password_reset_by_admin: 'Ideiglenes jelszó (admin)',
   admin_created: 'Admin létrehozva', admin_password_reset_cli: 'Admin jelszó visszaállítva', user_created: 'Felhasználó létrehozva',
   user_updated: 'Felhasználó módosítva', tile_created: 'Csempe létrehozva', tile_updated: 'Csempe módosítva',
-  tile_deleted: 'Csempe törölve', tiles_reordered: 'Csempesorrend módosítva', settings_updated: 'Beállítás módosítva',
+  tile_deleted: 'Csempe törölve', legacy_import_preview: 'Régi adatok előnézete', legacy_import_committed: 'Régi adatok importálva', tiles_reordered: 'Csempesorrend módosítva', settings_updated: 'Beállítás módosítva',
 };
 
 function RolesView({ roles }: { roles: Role[] }) {
@@ -105,6 +106,7 @@ export function AdminPage() {
     ['users', 'Felhasználók', <Users size={18} />],
     ['roles', 'Szerepkörök', <Shield size={18} />],
     ['settings', 'Beállítások', <Settings size={18} />],
+    ['import', 'Régi adatok', <DatabaseBackup size={18} />],
     ['audit', 'Eseménynapló', <History size={18} />],
   ];
 
@@ -126,6 +128,7 @@ export function AdminPage() {
         {tab === 'users' && roles.length > 0 && <UsersAdmin roles={roles} />}
         {tab === 'roles' && <RolesView roles={roles} />}
         {tab === 'settings' && <SettingsView />}
+        {tab === 'import' && <LegacyImport />}
         {tab === 'audit' && <AuditView />}
       </div>
     </div>

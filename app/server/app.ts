@@ -14,6 +14,7 @@ import { HttpError } from './lib/http.js';
 import { authRoutes } from './routes/auth.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { adminRoutes } from './routes/admin.js';
+import { legacyRoutes } from './routes/legacy.js';
 
 export interface BuildOptions {
   config: AppConfig;
@@ -91,6 +92,7 @@ export async function buildApp({ config, db, logger = true }: BuildOptions) {
   await app.register(authRoutes, { db, config });
   await app.register(dashboardRoutes, { db });
   await app.register(adminRoutes, { db });
+  await app.register(legacyRoutes, { db, config });
 
   // A lefordított React-felület kiszolgálása (production build esetén)
   const here = path.dirname(fileURLToPath(import.meta.url));

@@ -26,6 +26,8 @@ Besttech projekt → **+ New → Database → PostgreSQL**. (Ha még nincs.)
 | `INITIAL_ADMIN_EMAIL` | `info@besttech.hu` (csak az első indításig) |
 | `INITIAL_ADMIN_PASSWORD` | erős ideiglenes jelszó (csak az első indításig, utána TÖRÖLNI) |
 
+| `LEGACY_IMPORT_ENABLED` | `false` (régi adatok importja csak jóváhagyás után, egyszer) |
+
 A `PORT`-ot a Railway adja meg.
 
 ## 4. Domain és DNS

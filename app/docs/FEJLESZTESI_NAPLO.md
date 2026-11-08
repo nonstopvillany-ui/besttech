@@ -45,3 +45,37 @@ Formátum: dátum · feladat · fájlok · ág/commit · teszt · nyitott kérd�
 - Az „Építési ütemező” csempe mutasson-e átmenetileg a v25-re? (cím szükséges)
 
 **Következő lépés:** jóváhagyás után Railway-telepítés; utána 1.0 – Építési ütemező v26.
+
+---
+
+## 2026-11-08 – v26 alap: ütemező adatmodell és régi adatok importjának előkészítése
+
+**Állapotfelmérés:** távoli `main` változatlan (`2f2fad4`). GitHub-írási jog mostantól van.
+Új ág: `feature/besttech-v26` (a 0.3-as commitra épül: bejelentkezés, főoldal, admin).
+
+**Elvégezve**
+- `002_scheduler_and_legacy_import.sql`: workers, categories, task_templates(+workers), projects
+  (HRSZ csak tájékoztató, `drive_folder_id` előkészítve), project_tasks, task_segments, task_workers,
+  task_days (+task_day_workers), worker_day_hours, conflict_acks, pay_adjustments,
+  subcontractor_payments, legacy_imports.
+- `server/legacy/`: calc.ts (v25 dátumszámítás), seed.ts (23 alapmunka, 8 kategória),
+  transform.ts (ellenőrzés + átalakítás + jelentés), importer.ts (egy tranzakciós írás).
+- API: `GET /api/admin/legacy-import/status`, `POST .../preview` (nem ír), `POST .../commit` (alapból tiltva).
+- Admin felület: „Régi adatok” fül. CLI: `npm run legacy:check`.
+
+**Módosított fájlok:** csak `app/` alatt (új: migráció, server/legacy/*, routes/legacy.ts,
+cli/legacy-check.ts, LegacyImport.tsx, tesztek + kitalált mintafájl; módosítva: app.ts, config.ts,
+AdminPage.tsx, styles.css, package.json, .env.example, docs). A régi ütemező fájljai változatlanok.
+
+**Tesztelés:** 61 automatikus teszt sikeres (ebből 21 új): a v25 eredeti dátumfüggvényeivel való
+egyezés 300 véletlen esetre; átalakítás, figyelmeztetések, állapotok; előnézet nem ír adatbázisba;
+import alapból tiltott (403); megerősítés kötelező; import után a DB egyezik az előnézet ellenőrző
+összegeivel; az eredeti JSON változatlanul tárolódik; második import elutasítva.
+Böngészős próba: Régi adatok fül, mintafájl előnézete, JS-hiba nincs. Valódi adat NEM került importálásra.
+
+**Helyesbítés:** a korábbi elemzés „29 alapmunkát” írt; a v25-ben valójában **23** beépített alapmunka van.
+
+**Nyitott kérdések:** valódi mentésfájlok begyűjtése (gépenként), a hiteles példány kijelölése;
+Railway-telepítés jóváhagyása; DNS; logó; raktárkezelő címe.
+
+**Következő lépés:** 1.0 – Ütemező v26 felülete (a v25 nézetek API-ból), az import élesítése jóváhagyás után.

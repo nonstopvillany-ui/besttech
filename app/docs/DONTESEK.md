@@ -17,3 +17,9 @@ Rövid, dátumozott döntések, hogy a ChatGPT és a Claude Code ugyanabból ind
 | D11 | 2026-11-08 | Beépített (rendszer-) csempe nem törölhető, csak elrejthető | Véletlen törlés ellen |
 | D12 | 2026-11-08 | Első admin: CLI (rejtett jelszóbevitel) vagy egyszeri `INITIAL_ADMIN_*` változó, kötelező jelszócserével | Jelszó nem kerül a kódba |
 | D13 | 2026-11-08 | Szöveges Besttech-embléma, a v25 színeivel (#173d67, #1761b4) | A Drive „Arculati elemek” mappája üres; hivatalos logó esetén cserélendő (`client/src/components/Brand.tsx`) |
+| D14 | 2026-11-08 | Fejlesztési ág: `feature/besttech-v26` (a tulajdonos kérésére); a `main` érintetlen | Jóváhagyás előtt semmi nem kerül az éles ágra |
+| D15 | 2026-11-08 | Az elvégzett napok és napi eltérések dátumhoz kötve (`task_days`), a v25 `done[i]` sorszámát az import dátumra fordítja | Megszünteti a v25 elcsúszó pipáinak hibáját |
+| D16 | 2026-11-08 | Az import a v25 dátumszámítását pontosan követi (csak vasárnap szabadnap), automatikus teszt veti össze a régi kóddal | Különben a régi pipák rossz napra kerülnének |
+| D17 | 2026-11-08 | Import: előnézet szabadon, tényleges import csak `LEGACY_IMPORT_ENABLED=true` + megerősítés mellett, egyszer, egy tranzakcióban; az eredeti JSON a `legacy_imports.raw` mezőben | Adatvesztés és duplikáció elleni védelem |
+| D18 | 2026-11-08 | A régi adathibák (árva napi megjegyzés, ismeretlen dolgozó, tartományon kívüli pipa stb.) nem állítják meg az importot, hanem figyelmeztetésként jelennek meg; ismeretlen dolgozó inaktívként kerül be | Semmi ne vesszen el csendben; a döntés látható |
+| D19 | 2026-11-08 | A beépített sablonok (23 db) csak név/napszám/kategória; ügyfélneveket a kód nem tartalmaz | Személyes adat nem kerül a tárolóba |

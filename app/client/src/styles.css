@@ -237,3 +237,9 @@ a { color: var(--blue); }
 @media (max-width: 360px) {
   .tiles { grid-template-columns: 1fr; }
 }
+
+/* Régi adatok importja */
+.warnlist { margin: 0; padding-left: 18px; max-height: 320px; overflow: auto; font-size: 0.9rem; }
+.warnlist li { margin-bottom: 4px; }
+.warnlist code { background: #fff4dc; color: var(--warn); padding: 1px 6px; border-radius: 6px; font-size: 0.75rem; }
+section h3 { display: flex; align-items: center; gap: 6px; margin-top: 22px; }
