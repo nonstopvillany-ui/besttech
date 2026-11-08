@@ -189,6 +189,12 @@ describe('ütemező – jogosultságok', () => {
     expect((await sync(app, felelos, { houses: [{ id: h.id, base: s.versions.houses[h.id], name: h.name, tasks: h.tasks }] })).statusCode).toBe(403);
     expect((await app.inject({ method: 'POST', url: '/api/projects', headers: felelos, payload: { name: 'X' } })).statusCode).toBe(403);
   });
+  it('a főoldalon csak azok a modulcsempék látszanak, amelyekhez jog van', async () => {
+    const tiles = (await app.inject({ url: '/api/dashboard', headers: user })).json().tiles.map((t: { moduleKey: string }) => t.moduleKey);
+    expect(tiles).toContain('utemezo');
+    expect(tiles).not.toContain('ugyfelek');
+    expect(tiles).not.toContain('projektek');
+  });
   it('alap felhasználó: ügyfelekhez és projektekhez nem fér hozzá', async () => {
     expect((await app.inject({ url: '/api/customers', headers: user })).statusCode).toBe(403);
     expect((await app.inject({ url: '/api/projects', headers: user })).statusCode).toBe(403);
@@ -240,7 +246,7 @@ describe('régi v25 adatok: import után az ütemező ugyanazt mutatja', () => {
     ({ app: app2, db: db2 } = await setup({ LOGIN_RATE_LIMIT: '1000', LEGACY_IMPORT_ENABLED: 'true' }));
     await upsertAdmin(db2, 'admin@example.invalid', 'Ideiglenes2026', { resetIfExists: true });
     a2 = await session(app2, 'admin@example.invalid', 'Ideiglenes2026', 'AdminTeszt2026');
-    const r = await app2.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: a2, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS' } });
+    const r = await app2.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: a2, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS', backupConfirmed: true } });
     expect(r.statusCode).toBe(200);
   });
   afterAll(async () => { await app2?.close(); await db2?.end(); app = undefined as never; db = undefined as never; });

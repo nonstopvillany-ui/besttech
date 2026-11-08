@@ -243,3 +243,24 @@ a { color: var(--blue); }
 .warnlist li { margin-bottom: 4px; }
 .warnlist code { background: #fff4dc; color: var(--warn); padding: 1px 6px; border-radius: 6px; font-size: 0.75rem; }
 section h3 { display: flex; align-items: center; gap: 6px; margin-top: 22px; }
+
+/* Ügyfelek, projektek */
+.split { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 0 12px; margin-bottom: 12px; background: #fff; color: var(--muted); }
+.search input { border: 0; outline: 0; font: inherit; padding: 11px 0; flex: 1; min-width: 0; }
+.select { font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; min-height: 44px; background: #fff; }
+.table tr.clickable { cursor: pointer; }
+.table tr.clickable:hover td, .table tr.is-sel td { background: #eef5fd; }
+.table code, .plist code, .modal__head code { background: #eef1f5; padding: 1px 6px; border-radius: 6px; font-size: 0.82rem; color: var(--navy); }
+.dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; margin: 0 0 8px; }
+.dl dt { color: var(--muted); font-size: 0.88rem; }
+.dl dd { margin: 0; }
+.pre { white-space: pre-wrap; }
+.plist { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-direction: column; gap: 6px; }
+.mini { height: 5px; background: #e6edf5; border-radius: 3px; margin: 4px 0; max-width: 160px; overflow: hidden; }
+.mini div { height: 100%; background: var(--ok); }
+.field textarea { font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; width: 100%; resize: vertical; }
+fieldset.plain { border: 0; padding: 0; margin: 0; min-width: 0; }
+.permtable td, .permtable th { text-align: center; }
+.permtable td:first-child, .permtable th:first-child { text-align: left; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }

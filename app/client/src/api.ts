@@ -37,6 +37,7 @@ export interface User {
   roleName: string;
   isAdmin: boolean;
   mustChangePassword: boolean;
+  permissions: string[];
 }
 
 export interface DashboardTile {
@@ -73,4 +74,5 @@ export interface Role {
   description: string;
   isAdmin: boolean;
   isSystem: boolean;
+  permissions: string[];
 }

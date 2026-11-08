@@ -1,0 +1,29 @@
+/* v26: a v25 felület illesztése a Besttech-alkalmazás arculatához */
+:root { --navy: #173d67; }
+.bt-loading { position: fixed; inset: 0; display: grid; place-items: center; background: #eef3f9; color: #173d67; font: 600 16px system-ui; z-index: 100; }
+.bt-loading[hidden] { display: none; }
+header { position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.bt-home { display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; }
+.bt-home svg { width: 34px; height: 34px; }
+.bt-brand { display: flex; flex-direction: column; line-height: 1; }
+.bt-brand b { letter-spacing: .12em; font-size: 15px; }
+.bt-brand small { font-size: 10px; letter-spacing: .2em; opacity: .8; margin-top: 2px; }
+header strong { border-left: 1px solid #ffffff44; padding-left: 14px; }
+.bt-ver { font-size: 11px; background: #1761b4; border-radius: 6px; padding: 1px 6px; vertical-align: middle; }
+.bt-user { font-size: 13px; opacity: .85; white-space: nowrap; }
+.bt-logout { background: #ffffff22; color: #fff; }
+.bt-proj { text-decoration: none; color: #12385e; }
+.bt-proj:empty { display: none; }
+.bt-save { font-size: 13px; color: #5c6f82; white-space: nowrap; }
+.bt-save.ok { color: #1e7a45; }
+.bt-save.busy { color: #1761b4; }
+.bt-save.err { color: #c0392b; font-weight: 600; }
+.bt-banner { padding: 9px 20px; background: #fff4dc; color: #7a4d00; border-bottom: 1px solid #f0d9a8; font-size: 14px; }
+.bt-banner.err { background: #fdecea; color: #b42318; border-color: #f5c2bd; }
+.bt-toast { position: fixed; right: 16px; bottom: 16px; max-width: 420px; background: #173d67; color: #fff; padding: 12px 16px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.25); font-size: 14px; z-index: 200; }
+.bt-empty { max-width: 560px; margin: 12vh auto; background: #fff; border-radius: 16px; padding: 32px; text-align: center; box-shadow: 0 6px 20px rgba(16,42,72,.08); font-family: system-ui; color: #173d67; }
+.bt-empty a, .bt-empty button { display: inline-block; margin: 6px; }
+/* Pénzügyi jog nélkül: órabér és bérezés elrejtve */
+body.bt-nofinance #v-workers th:nth-child(4), body.bt-nofinance #v-workers td:nth-child(4), body.bt-nofinance #toPay { display: none; }
+@media print { .bt-banner, .bt-toast, .bt-save { display: none !important; } }
+@media (max-width: 760px) { .bt-user, .bt-brand { display: none; } }

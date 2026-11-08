@@ -22,6 +22,26 @@ export const legacyRoutes: FastifyPluginAsync<{ db: Db; config: AppConfig }> = a
     };
   });
 
+  // Teljes adatmentés (JSON) az alkalmazás sémájából – jelszó-hash és munkamenetek nélkül.
+  // Az import (és minden nagyobb művelet) előtt letöltendő; a Railway saját mentése mellett.
+  app.get('/api/admin/backup', async (req, reply) => {
+    const admin = requireAdmin(req);
+    const { rows: tables } = await db.query(
+      `SELECT table_name FROM information_schema.tables
+        WHERE table_schema = current_schema() AND table_type = 'BASE TABLE' AND table_name NOT IN ('sessions') ORDER BY 1`);
+    const out: Record<string, unknown> = { exportedAt: new Date().toISOString(), schema: (await db.query('SELECT current_schema() AS s')).rows[0].s, tables: {} };
+    for (const { table_name: t } of tables) {
+      if (!/^[a-z_][a-z0-9_]*$/.test(t)) continue;
+      const { rows } = await db.query(`SELECT * FROM "${t}"`);
+      (out.tables as Record<string, unknown>)[t] = t === 'users' ? rows.map(({ password_hash: _p, ...u }) => u) : rows;
+    }
+    await audit(db, admin.id, 'backup_downloaded', 'backup', undefined, { tables: tables.length }, req.ip);
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    return reply.header('content-type', 'application/json; charset=utf-8')
+      .header('content-disposition', `attachment; filename="besttech-app-mentes-${stamp}.json"`)
+      .header('cache-control', 'no-store').send(JSON.stringify(out));
+  });
+
   // Előnézet: csak ellenőriz és összesít, az adatbázisba NEM ír
   app.post('/api/admin/legacy-import/preview', { bodyLimit }, async (req) => {
     const admin = requireAdmin(req);
@@ -53,6 +73,9 @@ export const legacyRoutes: FastifyPluginAsync<{ db: Db; config: AppConfig }> = a
     const { fileName, content } = body.parse(req.body);
     const confirm = z.object({ confirm: z.literal('IMPORTÁLÁS') }).safeParse(req.body);
     if (!confirm.success) throw new HttpError(400, 'A megerősítéshez írd be: IMPORTÁLÁS', 'CONFIRM_REQUIRED');
+    // Import előtt kötelező az adatbázis-mentés (Admin → Régi adatok → mentés letöltése, vagy Railway-mentés)
+    if ((req.body as { backupConfirmed?: unknown })?.backupConfirmed !== true)
+      throw new HttpError(400, 'Import előtt készíts adatbázis-mentést, és erősítsd meg.', 'BACKUP_REQUIRED');
     try {
       const { importId, report } = await commitLegacyImport(db, content, fileName, admin.id);
       await audit(db, admin.id, 'legacy_import_committed', 'legacy_import', importId, { fileName, counts: report.counts }, req.ip);

@@ -1,6 +1,11 @@
 import type { FastifyPluginAsync } from 'fastify';
 import type { Db } from '../db.js';
-import { requireUser } from '../lib/http.js';
+import { can, requireUser } from '../lib/http.js';
+import type { Permission } from '../lib/permissions.js';
+
+// Beépített modulok: a csempe csak akkor látszik, ha a felhasználónak van joga a modulhoz
+const MODULE_PERMISSION: Record<string, Permission> = { utemezo: 'scheduler.view', projektek: 'projects.view', ugyfelek: 'customers.view' };
+const allowed = (user: Parameters<typeof can>[0], moduleKey: string | null) => !moduleKey || !MODULE_PERMISSION[moduleKey] || can(user, MODULE_PERMISSION[moduleKey]);
 
 export interface TileRow {
   id: number;
@@ -55,7 +60,7 @@ export const dashboardRoutes: FastifyPluginAsync<{ db: Db }> = async (app, { db 
     const settings = await db.query(`SELECT value FROM app_settings WHERE key = 'dashboard'`);
     return {
       settings: settings.rows[0]?.value ?? {},
-      tiles: rows.map(mapTile).map((t) => ({
+      tiles: rows.map(mapTile).filter((t) => allowed(user, t.moduleKey)).map((t) => ({
         id: t.id, moduleKey: t.moduleKey, title: t.title, description: t.description, icon: t.icon, color: t.color,
         targetType: t.targetType, target: isTileReady(t) ? t.target : '', ready: isTileReady(t),
       })),
@@ -74,7 +79,7 @@ export const dashboardRoutes: FastifyPluginAsync<{ db: Db }> = async (app, { db 
         GROUP BY t.id`,
       [id, user.isAdmin, user.roleKey],
     );
-    if (!rows[0]) return reply.code(404).send({ error: 'Nem található.' });
+    if (!rows[0] || !allowed(user, rows[0].module_key)) return reply.code(404).send({ error: 'Nem található.' });
     const t = mapTile(rows[0]);
     return { tile: { id: t.id, title: t.title, description: t.description, icon: t.icon, color: t.color, ready: isTileReady(t) } };
   });

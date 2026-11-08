@@ -5,6 +5,17 @@ import { api, ApiError } from '../api';
 import { useAuth } from '../auth';
 import { Brand } from '../components/Brand';
 
+/** Belépés utáni visszairányítás: ?vissza=/utemezo vagy a védett oldal, ahonnan jött. */
+export function returnPath(location: { state: unknown; search: string }): string {
+  const from = (location.state as { from?: string } | null)?.from ?? new URLSearchParams(location.search).get('vissza') ?? '/';
+  return from.startsWith('/') && !from.startsWith('//') && !from.startsWith('/\\') ? from : '/';
+}
+export function goBack(navigate: (to: string, o?: { replace?: boolean }) => void, location: { state: unknown; search: string }) {
+  const to = returnPath(location);
+  if (to.startsWith('/utemezo')) window.location.assign(to); // nem a React-alkalmazás része
+  else navigate(to, { replace: true });
+}
+
 export function AuthCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="auth">
@@ -40,9 +51,11 @@ export function LoginPage() {
     setBusy(true);
     try {
       await api('/api/auth/login', { method: 'POST', body: { email, password } });
+      const { user } = await api<{ user: { mustChangePassword: boolean } }>('/api/auth/me');
       await refresh();
-      const from = (location.state as { from?: string } | null)?.from;
-      navigate(from && from.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
+      // Ideiglenes jelszónál előbb jelszócsere, utána vissza oda, ahonnan jött
+      if (user.mustChangePassword) navigate('/jelszo-csere' + location.search, { replace: true, state: location.state });
+      else goBack(navigate, location);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'A szerver nem érhető el.');
       setPassword('');

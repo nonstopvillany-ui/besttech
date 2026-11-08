@@ -1,12 +1,13 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { api, ApiError } from '../api';
 import { useAuth } from '../auth';
-import { AuthCard } from './Login';
+import { AuthCard, goBack } from './Login';
 
 export function ChangePasswordPage() {
   const { user, refresh, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
   const [again, setAgain] = useState('');
@@ -21,7 +22,7 @@ export function ChangePasswordPage() {
     try {
       await api('/api/auth/change-password', { method: 'POST', body: { currentPassword: current, newPassword: next } });
       await refresh();
-      navigate('/', { replace: true });
+      goBack(navigate, location);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'A szerver nem érhető el.');
     } finally {

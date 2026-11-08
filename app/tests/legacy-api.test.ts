@@ -30,7 +30,7 @@ describe('import – alapállapot (tiltott)', () => {
     for (const t of ['projects', 'project_tasks', 'workers', 'legacy_imports', 'task_days']) expect(await count(db, t)).toBe(0);
   });
   it('a tényleges import alapból tiltva', async () => {
-    const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS' } });
+    const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS', backupConfirmed: true } });
     expect(res.statusCode).toBe(403);
     expect(res.json().code).toBe('IMPORT_DISABLED');
     expect(await count(db, 'projects')).toBe(0);
@@ -61,8 +61,20 @@ describe('import – engedélyezve (csak teszt-adatbázison, kitalált adattal)'
     expect(res.statusCode).toBe(400);
     expect(await count(db, 'projects')).toBe(0);
   });
-  it('import után az adatbázis egyezik az előnézet összegeivel', async () => {
+  it('mentés megerősítése nélkül nem fut; a mentés letölthető, jelszó-hash nélkül', async () => {
     const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS' } });
+    expect(res.json().code).toBe('BACKUP_REQUIRED');
+    const b = await app.inject({ url: '/api/admin/backup', headers: h });
+    expect(b.statusCode).toBe(200);
+    expect(b.headers['content-disposition']).toMatch(/attachment/);
+    const json = b.json();
+    expect(json.schema).toBe('besttech_app');
+    expect(json.tables.users.length).toBeGreaterThan(0);
+    expect(JSON.stringify(json.tables.users)).not.toContain('scrypt$');
+    expect(json.tables.sessions).toBeUndefined();
+  });
+  it('import után az adatbázis egyezik az előnézet összegeivel', async () => {
+    const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS', backupConfirmed: true } });
     expect(res.statusCode).toBe(200);
     expect(await count(db, 'projects')).toBe(2);
     expect(await count(db, 'project_tasks')).toBe(6);
@@ -91,7 +103,7 @@ describe('import – engedélyezve (csak teszt-adatbázison, kitalált adattal)'
     expect(rows[0].raw).toEqual(JSON.parse(content));
   });
   it('második import elutasítva (nincs duplikáció)', async () => {
-    const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS' } });
+    const res = await app.inject({ method: 'POST', url: '/api/admin/legacy-import/commit', headers: h, payload: { fileName: 'minta.json', content, confirm: 'IMPORTÁLÁS', backupConfirmed: true } });
     expect(res.statusCode).toBe(409);
     expect(await count(db, 'projects')).toBe(2);
   });

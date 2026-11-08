@@ -79,3 +79,38 @@ Böngészős próba: Régi adatok fül, mintafájl előnézete, JS-hiba nincs. V
 Railway-telepítés jóváhagyása; DNS; logó; raktárkezelő címe.
 
 **Következő lépés:** 1.0 – Ütemező v26 felülete (a v25 nézetek API-ból), az import élesítése jóváhagyás után.
+
+---
+
+## 2026-11-08 – v26: ütemező integrálása, közös ügyfél- és projektnyilvántartás
+
+**Ág:** `feature/besttech-v26` (a `main` változatlan). Commitok: `c29a608` (háttér), és a záró commit.
+
+**Elvégezve**
+- Saját adatbázisséma (`besttech_app`), `npm run db:inspect` (csak olvasás), migrációs terv.
+- 003-as migráció: ügyfelek, projektkód/ügyfélkapcsolat, csapatok, projektköltségek, dokumentumok,
+  jogosultságok, ütemező-verziók, előzmények, 23 alapsablon; csempék: ütemező/projektek/ügyfelek aktív.
+- API: ügyfelek, projektek, ütemező (state/versions/sync), szerepkör-jogosultságok, adatmentés.
+- `/utemezo`: a v25 felülete a központi adatbázissal (adatréteg: mentés, ütközéskezelés, frissítés).
+- `/ugyfelek`, `/projektek` React-oldalak; Admin → Szerepkörök jogosultsági táblázat.
+- Import: mentés-megerősítés kötelező; dolgozók/sablonok név szerinti egyeztetése.
+
+**Tesztelés**
+- 81 automatikus teszt sikeres (20 új): ügyfél és projekt létrehozása, hozzárendelés, megjelenés
+  az ütemezőben, munkafázis-módosítás mentése/visszatöltése (dátumok, szakaszok, pipák, napi
+  eltérések), átnevezés a Projektek modulban → ütemező, elavult mentés 409, két projekt egyidejű
+  mentése, új projekt az ütemezőből, archiválás, dolgozók szakasz, előzmények, jogosultságok
+  (munkafelelős csak olvas, felhasználó nem lát ügyfelet, pénzügyi adatok rejtése és védelme,
+  szerepkör-jogok módosítása), import után az ütemező a v25 adatait mutatja, mentés letöltése.
+- Böngészős teszt (Playwright, 3 felhasználó + mobil): ügyfél és projekt a felületen, ütemező
+  projektválasztó, két felhasználó egyidejű munkája, napszám-módosítás és visszatöltés,
+  átnevezés és új projekt automatikus megjelenése a nyitott ütemezőben, csak olvasó mód,
+  jogosultsági táblázat. JS- és szerverhiba nem volt.
+
+**Nyitott kérdések / hátralévő**
+- Railway: meglévő adatbázis ellenőrzése (`db:inspect`), mentés, telepítés – jóváhagyásra vár.
+- Valódi v25 adatok importja – jóváhagyásra vár (előtte mentés).
+- Csapatok, projektköltségek, dokumentumok felülete; automatikus e-mail; feladatok készre
+  jelentése munkafelelősként (mobil); a v25 áthúzáskori napi-eltérés-hiba (C.8) javítása.
+
+**Következő lépés:** jóváhagyás után staging-telepítés, majd az import próbája egy mentés másolatán.

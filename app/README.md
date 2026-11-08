@@ -19,6 +19,35 @@ Az új, moduláris webalkalmazás. Tervezett éles cím: **https://app.besttech.
   felhasználók létrehozása, szerkesztése, letiltása, ideiglenes jelszó; főoldal-beállítások; eseménynapló
 - Mobil- és asztali nézet
 
+## Építési ütemező v26 – `/utemezo`
+
+- A v25 **megszokott felülete és minden funkciója** (toronynézet, 10/30 napos, havi és dolgozónkénti
+  nézet, napi terv, összesítő naptár, ki hol dolgozik, bérezés, alvállalkozók, esti e-mail előnézet,
+  dolgozók), Besttech-fejléccel – a localStorage helyett a **központi PostgreSQL-adatbázissal**.
+- Forrás: `client/utemezo/app.js` (a `forras/app.js` másolata, célzott módosításokkal – a fájl
+  elején felsorolva), `client/utemezo/sync.js` (adatréteg). A régi `index.html` érintetlen.
+- A projektválasztó a központi **projects** táblából töltődik: a Projektek modulban felvett vagy
+  átnevezett projekt az ütemezőben is megjelenik (nyitott ütemezőben is, kb. 15 mp-en belül).
+- Mentés automatikusan, késleltetve, csak a megváltozott projekt/szakasz; ha közben más ugyanazt
+  módosította, a friss állapot töltődik be, a többi módosítás megmarad (nincs csendes felülírás).
+- „Projekt törlése” helyett **archiválás** – az adatok megmaradnak.
+- Jogosultság: megtekintés / szerkesztés / pénzügy (bérek, bértételek, kifizetések) külön.
+- API: `GET /api/scheduler/state`, `GET /api/scheduler/versions`, `PUT /api/scheduler/sync`
+
+## Ügyfelek és projektek – `/ugyfelek`, `/projektek`
+
+- Közös nyilvántartás: egy ügyfélhez több projekt; egyedi kódok (`U-00001`, `P-00001`).
+- Kereshető listák, adatlapok, verzióellenőrzött módosítás, ügyfélből új projekt, projektből
+  az ütemező megnyitása.
+- API: `GET/POST /api/customers`, `GET/PUT /api/customers/:id`, `GET/POST /api/projects`, `GET/PUT /api/projects/:id`
+- Az adatbázisban előkészítve (felület később): csapatok, projektköltségek, dokumentum-metaadat.
+
+## Jogosultságok
+
+Admin → **Szerepkörök**: pipálható táblázat (`scheduler.view/edit/finance`, `customers.view/edit`,
+`projects.view/edit`). Az Adminisztrátor mindig teljes jogú. A főoldali csempék is csak a
+jogosult modulokat mutatják.
+
 ## Régi ütemező (v25) adatainak importja – előkészítve
 
 - `migrations/002_scheduler_and_legacy_import.sql`: az ütemező adatmodellje (projektek, munkafázisok,
@@ -29,8 +58,14 @@ Az új, moduláris webalkalmazás. Tervezett éles cím: **https://app.besttech.
 - Admin → **Régi adatok** fül: mentésfájl feltöltése → **előnézet** (nem ír adatbázisba):
   darabszámok, ellenőrző összegek, adathibák listája.
 - A **tényleges import alapból tiltva**; csak `LEGACY_IMPORT_ENABLED=true` mellett, „IMPORTÁLÁS”
-  megerősítéssel, egyszer futtatható. **Valódi adatot eddig senki nem importált.**
+  megerősítéssel és az adatbázis-mentés megerősítésével, egyszer futtatható.
+- Adatbázis-mentés letöltése: Admin → Régi adatok (`GET /api/admin/backup`, jelszó-hash nélkül). **Valódi adatot eddig senki nem importált.**
 - Parancssori ellenőrzés adatbázis nélkül: `npm run legacy:check -- mentes.json`
+
+## Adatbázis
+
+Saját séma: `besttech_app` (`DB_SCHEMA`). Csak olvasó ellenőrzés: `npm run db:inspect`.
+Migrációs terv: [docs/MIGRACIOS_TERV.md](docs/MIGRACIOS_TERV.md)
 
 ## Technológia
 

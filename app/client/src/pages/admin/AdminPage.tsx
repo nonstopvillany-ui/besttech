@@ -13,25 +13,40 @@ const ACTIONS: Record<string, string> = {
   password_reset_requested: 'Új jelszót kért', password_reset_by_admin: 'Ideiglenes jelszó (admin)',
   admin_created: 'Admin létrehozva', admin_password_reset_cli: 'Admin jelszó visszaállítva', user_created: 'Felhasználó létrehozva',
   user_updated: 'Felhasználó módosítva', tile_created: 'Csempe létrehozva', tile_updated: 'Csempe módosítva',
-  tile_deleted: 'Csempe törölve', legacy_import_preview: 'Régi adatok előnézete', legacy_import_committed: 'Régi adatok importálva', tiles_reordered: 'Csempesorrend módosítva', settings_updated: 'Beállítás módosítva',
+  tile_deleted: 'Csempe törölve', role_permissions_updated: 'Jogosultságok módosítva', customer_created: 'Ügyfél létrehozva', customer_updated: 'Ügyfél módosítva', project_created: 'Projekt létrehozva', project_updated: 'Projekt módosítva', scheduler_saved: 'Ütemező mentve', legacy_import_preview: 'Régi adatok előnézete', legacy_import_committed: 'Régi adatok importálva', tiles_reordered: 'Csempesorrend módosítva', settings_updated: 'Beállítás módosítva',
 };
 
-function RolesView({ roles }: { roles: Role[] }) {
+function RolesView({ roles, catalog, reload }: { roles: Role[]; catalog: Array<{ key: string; label: string }>; reload: () => void }) {
+  const [msg, setMsg] = useState('');
+  const toggle = async (r: Role, perm: string, on: boolean) => {
+    const next = on ? [...r.permissions, perm] : r.permissions.filter((p) => p !== perm && !(perm.endsWith('.view') && p.startsWith(perm.split('.')[0] + '.')));
+    try {
+      await api(`/api/admin/roles/${r.key}/permissions`, { method: 'PUT', body: { permissions: next } });
+      setMsg(`${r.name}: jogosultságok mentve. A felhasználók a következő kérésüktől az új jogokkal dolgoznak.`);
+      reload();
+    } catch (e) { setMsg(e instanceof ApiError ? e.message : 'Hiba történt.'); }
+  };
   return (
     <section>
-      <h2>Szerepkörök</h2>
+      <h2>Szerepkörök és jogosultságok</h2>
       <p className="muted">
-        A szerepkör határozza meg, mely főoldali csempéket látja a felhasználó (a csempe szerkesztésekor állítható).
-        Az Adminisztrátor teljes jogosultságú. A modulonkénti részletes jogosultságok az egyes modulokkal együtt készülnek el.
+        Pipáld be, mely szerepkör mit érhet el. A szerkesztési jog mellé a megtekintés automatikusan jár.
+        Az Adminisztrátor mindig teljes jogú. A főoldali csempék láthatósága a Csempék fülön állítható.
       </p>
-      <div className="cards">
-        {roles.map((r) => (
-          <div key={r.key} className="card">
-            <b>{r.name} {r.isAdmin && <span className="badge badge--ok"><Shield size={12} /> teljes jog</span>}</b>
-            <p className="muted small">{r.description}</p>
-          </div>
-        ))}
-      </div>
+      {msg && <p className="alert alert--info">{msg}</p>}
+      <div className="tablewrap"><table className="table permtable">
+        <thead><tr><th>Jogosultság</th>{roles.map((r) => <th key={r.key}>{r.name}</th>)}</tr></thead>
+        <tbody>{catalog.map((p) => (
+          <tr key={p.key}>
+            <td data-label="Jogosultság">{p.label}<br /><small className="muted">{p.key}</small></td>
+            {roles.map((r) => (
+              <td key={r.key} data-label={r.name}>
+                <input type="checkbox" aria-label={`${r.name}: ${p.label}`} checked={r.isAdmin || r.permissions.includes(p.key)} disabled={r.isAdmin}
+                       onChange={(e) => toggle(r, p.key, e.target.checked)} />
+              </td>))}
+          </tr>))}
+        </tbody>
+      </table></div>
     </section>
   );
 }
@@ -99,7 +114,9 @@ function AuditView() {
 export function AdminPage() {
   const [tab, setTab] = useState<Tab>('tiles');
   const [roles, setRoles] = useState<Role[]>([]);
-  useEffect(() => { api<{ roles: Role[] }>('/api/admin/roles').then((r) => setRoles(r.roles)).catch(() => {}); }, []);
+  const [catalog, setCatalog] = useState<Array<{ key: string; label: string }>>([]);
+  const loadRoles = () => api<{ roles: Role[]; permissions: Array<{ key: string; label: string }> }>('/api/admin/roles').then((r) => { setRoles(r.roles); setCatalog(r.permissions); }).catch(() => {});
+  useEffect(() => { loadRoles(); }, []);
 
   const tabs: [Tab, string, React.ReactNode][] = [
     ['tiles', 'Csempék', <LayoutGrid size={18} />],
@@ -126,7 +143,7 @@ export function AdminPage() {
       <div className="panel">
         {tab === 'tiles' && roles.length > 0 && <TilesAdmin roles={roles} />}
         {tab === 'users' && roles.length > 0 && <UsersAdmin roles={roles} />}
-        {tab === 'roles' && <RolesView roles={roles} />}
+        {tab === 'roles' && <RolesView roles={roles} catalog={catalog} reload={loadRoles} />}
         {tab === 'settings' && <SettingsView />}
         {tab === 'import' && <LegacyImport />}
         {tab === 'audit' && <AuditView />}

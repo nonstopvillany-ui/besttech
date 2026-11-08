@@ -3,7 +3,8 @@
 > Csak jóváhagyás után! A **besttech-web** szolgáltatáshoz NEM kell hozzányúlni.
 
 ## 1. PostgreSQL
-Besttech projekt → **+ New → Database → PostgreSQL**. (Ha még nincs.)
+Ha már van adatbázis, előbb a **[migrációs terv](MIGRACIOS_TERV.md)** szerinti csak olvasó
+ellenőrzés (`npm run db:inspect`) és mentés. Ha nincs: Besttech projekt → **+ New → Database → PostgreSQL**.
 
 ## 2. A besttech-app szolgáltatás beállításai (Settings)
 | Beállítás | Érték |
@@ -27,6 +28,7 @@ Besttech projekt → **+ New → Database → PostgreSQL**. (Ha még nincs.)
 | `INITIAL_ADMIN_PASSWORD` | erős ideiglenes jelszó (csak az első indításig, utána TÖRÖLNI) |
 
 | `LEGACY_IMPORT_ENABLED` | `false` (régi adatok importja csak jóváhagyás után, egyszer) |
+| `DB_SCHEMA` | `besttech_app` (alapérték; saját séma, más alkalmazások tábláival nem ütközik) |
 
 A `PORT`-ot a Railway adja meg.
 
@@ -39,5 +41,6 @@ DNS-szolgáltatójánál **csak az `app` aldomainre** kell felvenni. A gyökérd
 ## 5. Ellenőrzés telepítés után
 1. `https://app.besttech.hu/api/health` → `{"status":"ok"}`
 2. Belépés `info@besttech.hu` + ideiglenes jelszó → kötelező jelszócsere
-3. Az `INITIAL_ADMIN_*` változók törlése
-4. Railway → Postgres → Backups bekapcsolása
+3. `https://app.besttech.hu/utemezo` → üres ütemező (a projektek a Projektek modulban vehetők fel)
+4. Az `INITIAL_ADMIN_*` változók törlése
+5. Railway → Postgres → Backups bekapcsolása

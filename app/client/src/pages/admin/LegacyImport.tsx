@@ -27,6 +27,7 @@ export function LegacyImport() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [confirm, setConfirm] = useState('');
+  const [backup, setBackup] = useState(false);
   const [done, setDone] = useState('');
 
   const loadStatus = () => api<Status>('/api/admin/legacy-import/status').then(setStatus).catch(() => {});
@@ -50,7 +51,7 @@ export function LegacyImport() {
     if (!file) return;
     setBusy(true); setError('');
     try {
-      const r = await api<{ importId: number }>('/api/admin/legacy-import/commit', { method: 'POST', body: { fileName: file.name, content: file.content, confirm } });
+      const r = await api<{ importId: number }>('/api/admin/legacy-import/commit', { method: 'POST', body: { fileName: file.name, content: file.content, confirm, backupConfirmed: backup } });
       setDone(`Az import sikeres (azonosító: ${r.importId}).`);
       setConfirm('');
       loadStatus();
@@ -102,8 +103,10 @@ export function LegacyImport() {
           ) : status?.commitEnabled ? (
             <div className="narrow">
               <p className="alert alert--error">Az import az adatbázisba írja a fenti adatokat. Csak egyszer futtatható. Előtte készíts adatbázis-mentést!</p>
+              <p><a className="btn" href="/api/admin/backup">⬇ Adatbázis-mentés letöltése</a></p>
+              <label className="chip"><input type="checkbox" checked={backup} onChange={(e) => setBackup(e.target.checked)} /> Elkészült az adatbázis-mentés (letöltés és/vagy Railway-mentés)</label>
               <label className="field"><span>Megerősítéshez írd be: IMPORTÁLÁS</span><input value={confirm} onChange={(e) => setConfirm(e.target.value)} /></label>
-              <button className="btn btn--primary" disabled={busy || confirm !== 'IMPORTÁLÁS'} onClick={commit}>Importálás indítása</button>
+              <button className="btn btn--primary" disabled={busy || confirm !== 'IMPORTÁLÁS' || !backup} onClick={commit}>Importálás indítása</button>
             </div>
           ) : (
             <p className="alert alert--info"><Lock size={16} /> A tényleges import jelenleg <b>ki van kapcsolva</b> (LEGACY_IMPORT_ENABLED). A tulajdonos jóváhagyása után kapcsolható be.</p>

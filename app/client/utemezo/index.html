@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#173d67">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Besttech – Építési ütemező v26</title>
+<link rel="stylesheet" href="./legacy.css">
+<link rel="stylesheet" href="./besttech.css">
+</head>
+<body>
+<div class="bt-loading" id="btLoading">Ütemező betöltése…</div>
+<!-- A v25 ütemező felülete (forras/app.js), változatlan szerkezettel -->
+<header><a href="/" class="bt-home" title="Vissza a Besttech főoldalra"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#ffffff22"/><path d="M14 33 32 17l18 16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 30v17h24V30" fill="none" stroke="#5fb0ff" stroke-width="5" stroke-linejoin="round"/></svg><span class="bt-brand"><b>BESTTECH</b><small>Kft.</small></span></a><strong>Építési ütemező <small class="bt-ver">v26</small></strong>
+<nav><button data-v="tower">▥ Toronynézet</button><button data-v="plan">📋 Napi terv</button><button data-v="cal">📅 Összesítő naptár</button><button data-v="people">🧑‍🔧 Ki hol dolgozik?</button><button data-v="pay">💰 Bérezés</button><button data-v="subs">🧾 Alvállalkozók</button><button data-v="mail">✉ Esti e-mail</button><button data-v="workers">👷 Dolgozók</button></nav><span class="bt-user" id="btUser"></span><button id="btLogout" class="bt-logout" title="Kijelentkezés">⎋ Kilépés</button></header>
+<div class="toolbar"><b>Projekt:</b><select id="house"></select><button id="addHouse">+ Új projekt</button><button id="renHouse">✏️ Átnevezés</button><button id="delHouse" title="Az ütemezőből eltávolítja (archiválja); az adatok megmaradnak">🗄 Projekt archiválása</button><span class="pill" id="summary"></span><a class="pill bt-proj" id="btProj" href="/projektek"></a><span style="margin-left:auto"></span><span class="bt-save" id="btSave" aria-live="polite"></span><button id="export" title="A jelenlegi állapot letöltése JSON-fájlként (biztonsági másolat)">💾 Mentés fájlba</button></div>
+<div class="bt-banner" id="btBanner" hidden></div>
+
+<section class="view" id="v-tower"><main class="layout">
+<div class="panel"><h2>Munkafolyamatok <button class="primary small" id="addTask">＋ Új</button></h2><div class="pb"><button id="pastBulk" style="width:100%;margin-bottom:8px;background:#e3f3e8;color:#1e6b38">✓ Korábban elkészült munkák jelölése</button><div class="field"><label>Kategória</label><select id="filter"></select></div><p class="muted">Húzd a munkát a 10 vagy 30 napos nézetben arra a napra, amikor kezdődik – a szerkesztő azonnal megnyílik. A napszám csak javaslat. Ha egy betett munka már korábban elkészült, a toronyban a téglán nyomd meg a „✓ korábban kész” gombot.</p><div id="list" class="list"></div><button class="small" id="restore" style="margin-top:8px">↺ Kitörölt alapmunkák visszaállítása</button></div></div>
+<div class="panel"><h2><span id="towerTitle">Építési torony</span><span class="modes"><span id="wModes" style="display:flex;gap:4px;margin-right:10px;flex-wrap:wrap"></span><button data-m="10">10 nap</button><button data-m="30">30 nap</button><button data-m="all">Teljes torony</button><select id="mSel" style="padding:6px;border-radius:8px;border:1px solid #cad5e3;font-size:13px"></select></span></h2>
+<div id="dayView"><div class="daynav"><button class="small" id="wPrev">‹ Vissza</button><button class="small" id="wToday">Ma</button><button class="small" id="wNext">Előre ›</button><span class="muted" id="wLabel"></span></div><div class="days" id="days"></div></div>
+<div class="towerwrap" id="fullView"><p class="muted" style="text-align:center">Alulról felfelé épül · a tégla szélessége a munkanapok számát jelzi</p><div id="tower" class="tower"></div>
+<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:13px"><b>Projekt előrehaladása</b><b id="progLabel"></b></div><div class="progress"><div id="progBar"></div></div></div></div></div>
+<div class="panel"><h2>Kiválasztott munka</h2><div class="pb" id="details"></div></div>
+</main></section>
+<section class="view" id="v-plan"></section>
+<section class="view" id="v-pay"></section>
+<section class="view" id="v-subs"></section>
+<section class="view" id="v-cal"></section>
+<section class="view" id="v-people"></section>
+<section class="view" id="v-mail"></section>
+<section class="view" id="v-workers"></section>
+
+<dialog id="pastDlg"><h2 style="margin-top:0">✓ Korábban elkészült munkák</h2><p class="muted">Pipáld be, ami már kész volt, mielőtt elkezdted az ütemezést. Dátum és dolgozó nélkül kerülnek a torony aljára, és beleszámítanak a projekt előrehaladásába.</p><p><button class="small" id="pastAll">Mind kijelölése</button> <button class="small" id="pastNone">Egyik sem</button></p><div id="pastList" style="max-height:50vh;overflow:auto"></div><p style="display:flex;gap:8px"><button class="primary" id="pastOk">Kijelöltek késznek jelölése</button><button id="pastCancel">Mégse</button></p></dialog>
+<dialog id="editor"><h2 id="edTitle" style="margin-top:0"></h2>
+<div class="field"><label>Megnevezés</label><input id="eName"></div>
+<div class="row"><div class="field"><label>Kategória <button type="button" class="small" id="eAddCat" style="padding:1px 7px">＋ új</button></label><select id="eCat"></select></div><div class="field"><label>Munkanap</label><input id="eDays" type="number" min="1"></div><div class="field"><label>Kezdés</label><input id="eStart" type="date"></div></div>
+<div class="field"><label>További szakaszok (ha a munka megszakad és később folytatódik)</label><div id="eSegs"></div><button type="button" class="small" id="eAddSeg">＋ Szakasz hozzáadása</button></div>
+<div class="field"><label>Felelős (munkafelelős)</label><select id="eLead"></select></div>
+<div class="field"><label>Beosztott dolgozók</label><div class="chips" id="eWorkers"></div></div>
+<div class="field"><label>Megjegyzés a felelősnek (bekerül az esti e-mailbe)</label><textarea id="eNotes" rows="3" placeholder="pl. Figyeljetek a vasalás takarására! Ne felejtsétek a kalapácsot."></textarea></div>
+<label id="eOnlyWrap" class="chip" style="margin-bottom:10px"><input type="checkbox" id="eOnly"> Csak ennél a projektnél (különben minden projekt listájába bekerül)</label>
+<p style="display:flex;gap:8px"><button class="primary" id="edSave">Mentés</button><button id="edCancel">Mégse</button></p></dialog>
+
+<footer class="appfoot">Ez az oldal a <b>Besttech Kft.</b> tulajdona · Építési ütemező <b>v26</b> · központi adatbázis · © 2026 Besttech Kft. Minden jog fenntartva.</footer>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

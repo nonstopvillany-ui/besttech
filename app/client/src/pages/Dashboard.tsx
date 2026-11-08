@@ -10,6 +10,9 @@ interface DashboardData {
   tiles: DashboardTile[];
 }
 
+// A React-alkalmazás saját oldalai; minden más belső cél (pl. /utemezo) külön oldal
+const SPA_ROUTE = /^\/($|admin|ugyfelek|projektek|modul|jelszo-csere)(\/|\?|$)/;
+
 function TileCard({ tile }: { tile: DashboardTile }) {
   const style = { '--tile-color': tile.color } as React.CSSProperties;
   const body = (
@@ -24,7 +27,9 @@ function TileCard({ tile }: { tile: DashboardTile }) {
   if (tile.ready && tile.targetType === 'external')
     return <a className="tile" style={style} href={tile.target} target="_blank" rel="noopener noreferrer">{body}</a>;
   if (tile.ready && tile.targetType === 'internal')
-    return <Link className="tile" style={style} to={tile.target}>{body}</Link>;
+    return SPA_ROUTE.test(tile.target)
+      ? <Link className="tile" style={style} to={tile.target}>{body}</Link>
+      : <a className="tile" style={style} href={tile.target}>{body}</a>;
   return <Link className="tile tile--dev" style={style} to={`/modul/${tile.id}`}>{body}</Link>;
 }
 
