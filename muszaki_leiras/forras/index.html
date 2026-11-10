@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<title>BESTTECH – Épületszerkezeti és Szakági műszaki leírás</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--
+  SZERKESZTÉS: a szövegek közvetlenül ebben a fájlban módosíthatók (bármely szövegszerkesztővel).
+  PDF készítése: lásd README.md (node pdf_keszites.js).
+  A left/top értékek a jóváhagyott PNG egy oldalának képpontjaiban (376 ×&nbsp;532) vannak megadva.
+-->
+
+<!-- =========================== 1. OLDAL – CÍMLAP =========================== -->
+<section class="page" id="oldal-1">
+ <div class="canvas">
+  <img class="abs" src="img/p1_cover.jpg" style="left:0;top:0;width:376px;height:467px" alt="">
+  <!-- logóterület: BESTTECH – BUILD QUALITY arculati fejléc -->
+  <img class="abs" src="img/logo_besttech_build_quality.png" style="left:20px;top:22px;width:218px" alt="BESTTECH – BUILD QUALITY">
+  <div class="cover-tag" style="left:24px;top:59px;width:214px;text-align:center">Építőipari generálkivitelezés</div>
+
+  <div class="cover-title" style="left:24px;top:103px">Épületszerkezeti és<br>Szakági műszaki leírás</div>
+  <div class="cover-sub" style="left:24px;top:169px">Családi ház kivitelezésének részletes<br>műszaki tartalma</div>
+
+  <div class="info-panel" style="left:9px;top:366px;width:358px;height:119px"></div>
+  <img class="abs" src="img/p1_ico_person.png" style="left:22px;top:377px;width:32px;height:29px" alt="">
+  <img class="abs" src="img/p1_ico_pin.png" style="left:22px;top:411px;width:32px;height:30px" alt="">
+  <img class="abs" src="img/p1_ico_cal.png" style="left:22px;top:446px;width:32px;height:30px" alt="">
+  <div class="info-row" style="left:63px;top:378px"><div class="lbl">Megrendelő:</div><div class="val">Kovács János</div></div>
+  <div class="info-row" style="left:63px;top:412px"><div class="lbl">Helyszín:</div><div class="val">Ismeretlen</div></div>
+  <div class="info-row" style="left:63px;top:447px"><div class="lbl">Dátum (kiküldés):</div><div class="val">2026. 11. 10.</div></div>
+
+  <div class="fb-box" style="left:191px;top:377px;width:168px;height:101px">
+   <div class="fb-q" style="margin-top:10px">Tetszik a műszaki leírás?</div>
+   <div class="fb-t" style="margin-top:3px">Folytatná velünk a<br>tervezést és a kivitelezést?</div>
+  </div>
+  <div class="fb-btn" style="left:202px;top:445px;width:146px;height:23px;text-align:center">Visszajelzés küldése »</div>
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">1 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 2. OLDAL – TARTALOMJEGYZÉK =========================== -->
+<section class="page" id="oldal-2">
+ <div class="canvas">
+  <img class="abs" src="img/p2_tile_book.png" style="left:16px;top:38px;width:47px;height:39px" alt="">
+  <div class="toc-title" style="left:80px;top:39px">Tartalomjegyzék</div>
+
+  <div class="toc-head" style="top:92px"><span class="n">1.</span><span class="t">Épületszerkezeti műszaki leírás</span><span class="p">3</span></div>
+  <div class="toc-row" style="top:116px"><span class="n">1.1</span><span class="t">Fogadószerkezet (alapozás)</span><span class="p">3</span></div>
+  <div class="toc-row" style="top:135.5px"><span class="n">1.2</span><span class="t">Falazatok</span><span class="p">3</span></div>
+  <div class="toc-row" style="top:155px"><span class="n">1.3</span><span class="t">Hőszigetelés és rétegrend</span><span class="p">4</span></div>
+  <div class="toc-row" style="top:174.5px"><span class="n">1.4</span><span class="t">Koszorú</span><span class="p">4</span></div>
+  <div class="toc-row" style="top:194px"><span class="n">1.5</span><span class="t">Belső aljzat (padlószerkezet)</span><span class="p">5</span></div>
+  <div class="toc-row" style="top:213.5px"><span class="n">1.6</span><span class="t">Tetőszerkezet és tetőfedés</span><span class="p">5</span></div>
+
+  <div class="toc-head" style="top:244px"><span class="n">2.</span><span class="t">Szakági műszaki leírás</span><span class="p">6</span></div>
+  <div class="toc-row" style="top:268px"><span class="n">2.1</span><span class="t">Felületképzés, festés</span><span class="p">6</span></div>
+  <div class="toc-row" style="top:287.5px"><span class="n">2.2</span><span class="t">Hideg- és melegburkolatok</span><span class="p">6</span></div>
+  <div class="toc-row" style="top:307px"><span class="n">2.3</span><span class="t">Belsőépítészet, gipszkarton</span><span class="p">6</span></div>
+  <div class="toc-row" style="top:326.5px"><span class="n">2.4</span><span class="t">Külső és belső nyílászárók, árnyékolók</span><span class="p">7</span></div>
+  <div class="toc-row" style="top:346px"><span class="n">2.5</span><span class="t">Villanyszerelés</span><span class="p">7</span></div>
+  <div class="toc-row" style="top:365.5px"><span class="n">2.6</span><span class="t">Víz és csatorna</span><span class="p">8</span></div>
+  <div class="toc-row" style="top:385px;border-bottom:none"><span class="n">2.7</span><span class="t">Fűtésrendszer</span><span class="p">8</span></div>
+
+  <img class="abs" src="img/p2_sketch.jpg" style="left:16px;top:406px;width:220px;height:88px" alt="">
+  <div class="toc-note" style="left:236px;top:410px;width:124px;height:80px">A műszaki leírás egy átfogó kivitelezési leírás, amely a Besttech által alkalmazott műszaki tartalmat mutatja be.</div>
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">2 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 3. OLDAL – FOGADÓSZERKEZET, FALAZATOK =========================== -->
+<section class="page" id="oldal-3">
+ <div class="canvas">
+  <div class="chapter-bar" style="left:60px;top:28px;width:302px">1. Épületszerkezeti műszaki leírás</div>
+  <img class="abs" src="img/p3_tile_house_red.png" style="left:19px;top:21px;width:50px;height:44px" alt="">
+
+  <img class="abs" src="img/p3_tile_excavator.png" style="left:18px;top:79px;width:52px;height:33px" alt="">
+  <div class="sec-title" style="left:79px;top:94px">1.1 Fogadószerkezet (alapozás)</div>
+  <div class="sec-rule" style="left:70px;top:108px"></div>
+  <ul class="chk" style="left:22px;top:121px;width:194px">
+   <li>Építési alap: geodéziai kitűzés és földmunka.</li>
+   <li>Sávalap: vasalt betonalap, 4–6 szál bordázott vasalattal (Ø12&nbsp;mm) és kengyelezéssel (Ø8&nbsp;mm) – jellemző méret: 30 ×&nbsp;30&nbsp;cm.</li>
+   <li>Lábazati fal: 30&nbsp;cm-es zsalukő elemekből, függőleges és vízszintes vasalással, kitöltve C20/25-KK minőségű betonnal.</li>
+   <li>Tömörített kavicságy.</li>
+  </ul>
+  <img class="abs photo" src="img/p3_photo_alap.jpg" style="left:219px;top:118px;width:143px;height:166px" alt="">
+
+  <img class="abs" src="img/p3_tile_wall.png" style="left:18px;top:303px;width:53px;height:36px" alt="">
+  <div class="sec-title" style="left:82px;top:319px;font-size:14px">1.2 Falazatok</div>
+  <div class="sec-rule" style="left:71px;top:334px"></div>
+  <ul class="chk" style="left:24px;top:349px;width:204px">
+   <li>Külső teherhordó fal: 30&nbsp;cm vastag pórusbeton falazóelem – Porfix Viablock vagy Ytong.</li>
+   <li>Belső teherhordó fal: 20–30&nbsp;cm vastag pórusbeton falazóelem.</li>
+   <li>Válaszfal: 10&nbsp;cm vastag pórusbeton falazóelem.</li>
+   <li>Áthidalók: a statikai terv szerint.</li>
+  </ul>
+  <img class="abs photo" src="img/p3_photo_porfix.jpg" style="left:234px;top:346px;width:128px;height:128px" alt="">
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">3 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 4. OLDAL – HŐSZIGETELÉS, LÁBAZAT, KOSZORÚ =========================== -->
+<section class="page" id="oldal-4">
+ <div class="canvas">
+  <img class="abs" src="img/p4_tile_layers.png" style="left:16px;top:27px;width:49px;height:33px" alt="">
+  <div class="sec-title" style="left:73px;top:42px">1.3 Hőszigetelés és rétegrend</div>
+  <div class="sec-rule" style="left:65px;top:56px"></div>
+
+  <div class="subhead" style="left:27px;top:69px">Homlokzati hőszigetelés (kívülről):</div>
+  <ul class="chk tight" style="left:27px;top:86px;width:198px">
+   <li>Ragasztóréteg</li>
+   <li>EPS&nbsp;80 homlokzati hőszigetelés, 15&nbsp;cm</li>
+   <li>Ragasztórétegbe ágyazott üvegszövet háló</li>
+   <li>Alapozó</li>
+   <li>Nemesvakolat (1,5–2&nbsp;mm, dörzsölt szemcsés)</li>
+  </ul>
+  <img class="abs photo" src="img/p4_photo_homlokzat.jpg" style="left:227px;top:67px;width:136px;height:117px" alt="">
+  <div class="divider" style="left:27px;right:14px;top:192px"></div>
+
+  <div class="subhead" style="left:27px;top:201px">Falszerkezeti csomópont – lábazat:</div>
+  <ul class="chk" style="left:27px;top:220px;width:200px">
+   <li>Lábazati hőszigetelés: XPS, 12&nbsp;cm</li>
+   <li>Vízszigetelés: GV35 talajnedvesség elleni szigetelőlemez</li>
+   <li>Kavicságy, tömörített aljzat</li>
+   <li>Visszatöltés, réteges tömörítéssel</li>
+  </ul>
+  <img class="abs photo" src="img/p4_photo_labazat.jpg" style="left:231px;top:197px;width:132px;height:114px" alt="">
+
+  <img class="abs" src="img/p4_tile_koszoru.png" style="left:17px;top:326px;width:53px;height:34px" alt="">
+  <div class="sec-title" style="left:79px;top:341px;font-size:14px">1.4 Koszorú</div>
+  <div class="sec-rule" style="left:70px;top:355px"></div>
+  <ul class="chk" style="left:28px;top:369px;width:198px">
+   <li>Vasbeton koszorú, 4–6 szál Ø12&nbsp;mm hosszirányú vasalattal</li>
+   <li>Ø8&nbsp;mm kengyelezéssel, 25 ×&nbsp;25&nbsp;cm méretben</li>
+   <li>C20/25-KK minőségű beton</li>
+   <li>A koszorú külső oldalán 5&nbsp;cm XPS hőszigetelés</li>
+  </ul>
+  <img class="abs photo" src="img/p4_photo_koszoru.jpg" style="left:237px;top:366px;width:126px;height:107px" alt="">
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">4 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 5. OLDAL – BELSŐ ALJZAT, TETŐ =========================== -->
+<section class="page" id="oldal-5">
+ <div class="canvas">
+  <img class="abs" src="img/p5_tile_layers.png" style="left:14px;top:19px;width:51px;height:35px" alt="">
+  <div class="sec-title" style="left:75px;top:36px">1.5 Belső aljzat (padlószerkezet)</div>
+  <div class="sec-rule" style="left:65px;top:50px"></div>
+  <img class="abs photo" src="img/p5_photo_aljzat.jpg" style="left:14px;top:65px;width:150px;height:141px" alt="">
+  <ul class="chk" style="left:176px;top:68px;width:188px">
+   <li>Vasalt aljzatbeton: C20/16-KK, 15&nbsp;cm</li>
+   <li>Talajnedvesség elleni szigetelés: GV35</li>
+   <li>Lépésálló hőszigetelés: EPS&nbsp;100, 15&nbsp;cm</li>
+   <li>Technológiai fólia</li>
+   <li>Esztrich aljzatbeton, 6&nbsp;cm</li>
+   <li>Végleges burkolat (laminált padló vagy hidegburkolat)</li>
+  </ul>
+  <div class="divider" style="left:176px;right:14px;top:230px"></div>
+
+  <img class="abs" src="img/p5_tile_roof.png" style="left:14px;top:243px;width:52px;height:35px" alt="">
+  <div class="sec-title" style="left:75px;top:259px">1.6 Tetőszerkezet és tetőfedés</div>
+  <div class="sec-rule" style="left:66px;top:274px"></div>
+  <img class="abs photo" src="img/p5_photo_teto.jpg" style="left:15px;top:290px;width:149px;height:167px" alt="">
+  <ul class="chk sm" style="left:178px;top:290px;width:186px">
+   <li>Szeglemezes tetőszerkezet (rovarvédő szerrel kezelt fűrészáru)</li>
+   <li>Alternatívaként hagyományos, ácsolt tetőszerkezet</li>
+   <li>Tetőszerkezeti kötőelemek, fogópárok</li>
+   <li>Tetőfedés: Tondach kerámiacserép vagy betoncserép (téglavörös, barna vagy antracit színben)</li>
+   <li>Alátéthéjazat: páraáteresztő tetőfólia</li>
+   <li>Tetőlécezés és ellenlécezés (min. 5&nbsp;cm)</li>
+   <li>Ereszcsatorna és lefolyócsövek: RS rendszer</li>
+  </ul>
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">5 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 6. OLDAL – FELÜLETKÉPZÉS, BURKOLATOK, GIPSZKARTON =========================== -->
+<section class="page" id="oldal-6">
+ <div class="canvas">
+  <div class="chapter-bar" style="left:62px;top:19px;width:301px">2. Szakági műszaki leírás</div>
+  <img class="abs" src="img/p6_tile_gear_red.png" style="left:20px;top:12px;width:51px;height:43px" alt="">
+
+  <img class="abs" src="img/p6_tile_roller.png" style="left:20px;top:68px;width:46px;height:31px" alt="">
+  <div class="sec-title" style="left:75px;top:82px;font-size:12.8px">2.1 Felületképzés, festés</div>
+  <div class="sec-rule" style="left:66px;top:95px"></div>
+  <img class="abs photo" src="img/p6_photo_festes.jpg" style="left:20px;top:105px;width:111px;height:64px" alt="">
+  <ul class="chk sm" style="left:144px;top:106px;width:222px">
+   <li>Főfalak és válaszfalak glettelése, csiszolása</li>
+   <li>Két réteg fehér diszperziós festék</li>
+   <li>Higiénikus, mosható</li>
+   <li>Élek alumínium élvédővel</li>
+  </ul>
+  <div class="divider" style="left:20px;right:14px;top:180px"></div>
+
+  <img class="abs" src="img/p6_tile_burkolat.png" style="left:20px;top:188px;width:46px;height:31px" alt="">
+  <div class="sec-title" style="left:75px;top:202px;font-size:12.8px">2.2 Hideg- és melegburkolatok</div>
+  <div class="sec-rule" style="left:66px;top:215px"></div>
+  <img class="abs photo" src="img/p6_photo_burkolat.jpg" style="left:20px;top:226px;width:99px;height:124px" alt="">
+  <ul class="chk xs" style="left:131px;top:224px;width:236px">
+   <li>Laminált padló, padlófűtésre alkalmas alátéttel (≥&nbsp;3500 Ft/m² kategória)</li>
+   <li>Nappali, étkező, közlekedő, kamra, konyha: ≤&nbsp;7&nbsp;cm-es lábazattal, hidegburkolat (≥&nbsp;5500 Ft/m² kategória)</li>
+   <li>Fürdőszobai falburkolat: 210–220&nbsp;cm magasságig (megrendelői igény szerint teljes falmagasságig), ≥&nbsp;5500 Ft/m²</li>
+   <li>WC falburkolata: 120&nbsp;cm magasságig</li>
+   <li>Konyhapult feletti burkolat: max. 2&nbsp;m²</li>
+   <li>60 ×&nbsp;60&nbsp;cm burkolólap és korszerű ragasztástechnológia</li>
+  </ul>
+
+  <img class="abs" src="img/p6_tile_gipsz.png" style="left:20px;top:372px;width:49px;height:31px" alt="">
+  <div class="sec-title" style="left:79px;top:387px;font-size:12.8px">2.3 Belsőépítészet, gipszkarton</div>
+  <div class="sec-rule" style="left:69px;top:400px"></div>
+  <img class="abs photo" src="img/p6_photo_gipsz.jpg" style="left:20px;top:412px;width:117px;height:65px" alt="">
+  <ul class="chk sm" style="left:150px;top:414px;width:216px">
+   <li>Fém vázszerkezetes gipszkarton álmennyezet</li>
+   <li>Vizes helyiségekben impregnált gipszkarton</li>
+   <li>Q3 minőségű glettelés</li>
+   <li>Fali csatlakozások akril tömítéssel</li>
+  </ul>
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">6 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 7. OLDAL – NYÍLÁSZÁRÓK, VILLANYSZERELÉS =========================== -->
+<section class="page" id="oldal-7">
+ <div class="canvas">
+  <img class="abs" src="img/p7_tile_window.png" style="left:16px;top:19px;width:53px;height:35px" alt="">
+  <div class="sec-title" style="left:79px;top:36px">2.4 Külső és belső nyílászárók, árnyékolók</div>
+  <div class="sec-rule" style="left:69px;top:51px"></div>
+  <img class="abs photo" src="img/p7_photo_ablak.jpg" style="left:16px;top:66px;width:129px;height:111px" alt="">
+  <ul class="chk sm" style="left:157px;top:66px;width:209px">
+   <li>Külső nyílászárók: Salamander bluEvolution 82 profil, 3 rétegű üvegezés (Uw&nbsp;≈&nbsp;0,82&nbsp;W/m²K)</li>
+   <li>Belső ajtók: CPL felületű, Borovi gyártmány (F1, F2, F3 típusok)</li>
+   <li>Redőnyök: motoros működtetéssel</li>
+   <li>Árnyékolók: igény szerint zsalúzia vagy roló, valamint szúnyogháló</li>
+  </ul>
+  <div class="divider" style="left:16px;right:14px;top:196px"></div>
+
+  <img class="abs" src="img/p7_tile_plug.png" style="left:17px;top:208px;width:47px;height:33px" alt="">
+  <div class="sec-title" style="left:74px;top:224px;font-size:14px">2.5 Villanyszerelés</div>
+  <div class="sec-rule" style="left:64px;top:240px"></div>
+  <img class="abs photo" src="img/p7_photo_villany.jpg" style="left:16px;top:256px;width:119px;height:145px" alt="">
+  <ul class="chk" style="left:150px;top:256px;width:216px">
+   <li>Teljes hálózat a szabványok szerint</li>
+   <li>Szobánként: 1&nbsp;db kapcsoló, 8&nbsp;db dugalj, 3&nbsp;db TV/NET kiállás, 1&nbsp;db termosztát</li>
+   <li>Konyha: sütő, főzőlap, hűtő, elszívó, mikró, mosogatógép kiállása</li>
+   <li>Fürdő: helyi lámpa, tükörvilágítás, dugalj</li>
+   <li>Kültéri világítás: 3&nbsp;db lámpa, 3&nbsp;db dugalj</li>
+   <li>Internetes kiállás: UTP Cat&nbsp;5e</li>
+  </ul>
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">7 / 8</span></div>
+ </div>
+</section>
+
+<!-- =========================== 8. OLDAL – VÍZ, CSATORNA, FŰTÉS =========================== -->
+<section class="page" id="oldal-8">
+ <div class="canvas">
+  <img class="abs" src="img/p8_tile_tap.png" style="left:16px;top:19px;width:39px;height:29px" alt="">
+  <div class="sec-title" style="left:62px;top:31px;font-size:12.6px">2.6 Víz és csatorna</div>
+  <div class="sec-rule" style="left:55px;top:44px"></div>
+  <img class="abs photo" src="img/p8_photo_viz.jpg" style="left:16px;top:57px;width:127px;height:100px" alt="">
+  <ul class="chk xs" style="left:157px;top:55px;width:209px">
+   <li>Főgerinc: 110–125 KG cső</li>
+   <li>Teljes szennyvízhálózat a szabvány szerint</li>
+   <li>Vízhálózat: többrétegű cső, hőszigetelve</li>
+   <li>HMV-keringető szivattyú: opcionálisan választható</li>
+   <li>Vízbetáplálás: 200&nbsp;l-es hőszivattyús tartály előkészítéssel</li>
+   <li>Szerelvények: WC, mosdó, csaptelepek (értékhatárok a műszaki leírás szerint)</li>
+  </ul>
+  <div class="divider" style="left:16px;right:14px;top:186px"></div>
+
+  <img class="abs" src="img/p8_tile_radiator.png" style="left:16px;top:194px;width:44px;height:31px" alt="">
+  <div class="sec-title" style="left:68px;top:208px;font-size:12.6px">2.7 Fűtésrendszer</div>
+  <div class="sec-rule" style="left:60px;top:222px"></div>
+  <img class="abs photo" src="img/p8_photo_futes.jpg" style="left:16px;top:236px;width:128px;height:94px" alt="">
+  <ul class="chk xs" style="left:157px;top:235px;width:209px">
+   <li>Hőszivattyús fűtésrendszer HMV-előállítással</li>
+   <li class="cont">ORION PRO LINE HP 8&nbsp;kW-1F, vagy műszakilag vele megegyező berendezés</li>
+   <li>Oxigéndiffúzió-mentes padlófűtéscsövek</li>
+   <li>Helyiségenkénti termosztátos szabályozás</li>
+   <li>Évenkénti karbantartás: igény szerint</li>
+  </ul>
+  <div class="divider" style="left:16px;right:14px;top:346px"></div>
+
+  <!-- piros ajánlatkérő doboz (háttér a PNG-ből, szöveg szerkeszthető) -->
+  <img class="abs" src="img/p8_cta_bg.png" style="left:12px;top:364px;width:354px;height:98px" alt="">
+  <div class="cta-text" style="left:79px;top:376px">Szeretné, ha elkészítenénk az Ön házának<br>személyre szabott ajánlatát?</div>
+  <div class="cta-btn" style="left:113px;top:418px;width:180px;height:32px;padding-left:15px;font-size:13px">Kérem a folytatást »</div>
+  <img class="abs" src="img/p8_cursor.png" style="left:262px;top:420px;width:28px;height:28px" alt="">
+
+  <div class="foot-rule"></div>
+  <div class="foot"><span><b>BESTTECH</b> – Családi ház kivitelezés</span><span class="pg">8 / 8</span></div>
+ </div>
+</section>
+</body>
+</html>

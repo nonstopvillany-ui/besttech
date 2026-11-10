@@ -1,0 +1,102 @@
+/* BESTTECH – 8 oldalas műszaki leírás – stíluslap
+   Minden oldal egy 376 × 532 egységnyi rajzlap (a jóváhagyott PNG egy oldalának
+   képpontmérete), amelyet a "zoom" pontosan A4 szélességre nagyít.
+   A koordináták (left/top) így közvetlenül a PNG-n mért értékek. */
+@import url(fonts.css);
+
+@page { size: A4 portrait; margin: 0; }
+
+:root {
+  --navy: #0f2b5b;      /* címek, szövegek sötétkékje */
+  --bar1: #11446a;      /* fejezetléc színátmenet */
+  --bar2: #2c5d86;
+  --red: #e0262b;       /* piros arculati szín */
+  --red-dark: #b8141a;
+  --text: #1d2635;
+  --rule: #a7b0b8;      /* alcímek alatti vonal */
+  --soft: #e3e7ec;      /* halvány elválasztó */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #8a8f96; }
+body { font-family: 'Fira Sans', 'Segoe UI', Arial, sans-serif; font-weight: 500; color: var(--text);
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.page { width: 210mm; height: 297mm; overflow: hidden; position: relative; background: #fff;
+        margin: 10mm auto; page-break-after: always; break-after: page; }
+.page:last-child { page-break-after: auto; break-after: auto; }
+@media print { html, body { background: #fff; } .page { margin: 0; } }
+
+.canvas { position: absolute; left: 0; top: 0; width: 376px; height: 531.8px; zoom: 2.110904; }
+.abs { position: absolute; }
+img.abs { display: block; }
+.photo { border-radius: 5px; box-shadow: 0 0.6px 2px rgba(0,0,0,.18); }
+
+/* ---------- lábléc ---------- */
+.foot-rule { position: absolute; left: 14px; right: 14px; top: 502px; height: 0; border-top: 0.9px solid #8fb0c4; }
+.foot { position: absolute; left: 15px; right: 17px; top: 506px; font-family: 'Fira Sans Condensed', sans-serif; font-weight: 600; font-size: 9.6px; color: var(--navy);
+        display: flex; justify-content: space-between; letter-spacing: -0.1px; }
+.foot b { font-weight: 800; }
+.foot .pg { font-weight: 700; }
+
+/* ---------- fejezetléc (piros ikon + kék sáv) ---------- */
+.chapter-bar { position: absolute; height: 31px; border-radius: 0 6px 6px 0;
+               background: linear-gradient(90deg, var(--bar1) 0%, var(--bar1) 55%, var(--bar2) 100%);
+               box-shadow: 0 0.8px 1.5px rgba(0,0,0,.25); color: #fff; font-weight: 700;
+               font-size: 16.6px; line-height: 31px; padding-left: 23px; font-weight: 800; white-space: nowrap; }
+
+/* ---------- alfejezet cím + vonal ---------- */
+.sec-title { position: absolute; color: var(--navy); font-weight: 700; font-size: 14px;
+             white-space: nowrap; transform: translateY(-50%); letter-spacing: -0.1px; }
+.sec-rule { position: absolute; right: 14px; height: 0; border-top: 0.8px solid var(--rule); }
+.divider { position: absolute; height: 0; border-top: 0.8px solid var(--soft); }
+
+/* ---------- pipás felsorolás ---------- */
+ul.chk { position: absolute; list-style: none; font-size: 10px; line-height: 12.4px; color: var(--text); }
+ul.chk li { position: relative; padding-left: 20px; margin-bottom: 4.6px; }
+ul.chk li::before { content: ""; position: absolute; left: 0; top: 0.5px; width: 13px; height: 11px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 22'><path d='M2.5 12.2 L9.4 18.6 L23.5 3.2' fill='none' stroke='%23d8262c' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain; }
+ul.chk li.cont::before { display: none; }
+ul.chk li.cont { margin-top: -3.4px; }
+ul.chk.sm { font-size: 9.3px; line-height: 11.4px; }
+ul.chk.sm li { padding-left: 18.5px; margin-bottom: 4.4px; }
+ul.chk.sm li::before { width: 12px; height: 10px; }
+ul.chk.xs { font-size: 8.8px; line-height: 10.8px; }
+ul.chk.xs li { padding-left: 18px; margin-bottom: 4px; }
+ul.chk.xs li::before { width: 12px; height: 10px; }
+.subhead { position: absolute; color: var(--navy); font-weight: 700; font-size: 10.6px; white-space: nowrap; }
+
+/* ---------- 1. oldal: címlap ---------- */
+.cover-tag { position: absolute; color: var(--navy); font-size: 12.4px; font-weight: 500; white-space: nowrap; }
+.cover-title { position: absolute; color: var(--navy); font-weight: 700; font-size: 21.6px; line-height: 27px; letter-spacing: -0.15px; }
+.cover-sub { position: absolute; color: var(--navy); font-size: 12.6px; line-height: 16.5px; font-weight: 500; }
+.info-panel { position: absolute; background: #fff; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.info-row { position: absolute; }
+.info-row .lbl { font-weight: 600; font-size: 8.9px; color: #1c2230; line-height: 11px; }
+.info-row .val { font-size: 10.4px; color: #1c2230; line-height: 13px; }
+.fb-box { position: absolute; border: 1.3px solid #c9272d; border-radius: 7px; background: #fff; text-align: center; }
+.fb-q { color: #d4232a; font-weight: 700; font-size: 10.4px; }
+.fb-t { color: #1c2230; font-size: 9.9px; line-height: 12.4px; }
+.fb-btn { position: absolute; border-radius: 5px; color: #fff; font-weight: 700; font-size: 10px; line-height: 23px;
+          background: linear-gradient(180deg, #ef2a2f 0%, #c8161c 100%); box-shadow: 0 1px 2px rgba(120,0,0,.35); }
+
+/* ---------- 2. oldal: tartalomjegyzék ---------- */
+.toc-title { position: absolute; color: var(--navy); font-weight: 700; font-size: 22.6px; white-space: nowrap; letter-spacing: -0.2px; }
+.toc-head { position: absolute; left: 17px; width: 343px; height: 23px; border-radius: 5px; background: #eef1f8;
+            color: var(--navy); font-weight: 700; font-size: 11.6px; line-height: 23px; }
+.toc-head .n { position: absolute; left: 9px; }
+.toc-head .t { position: absolute; left: 30px; }
+.toc-head .p { position: absolute; right: 13px; }
+.toc-row { position: absolute; left: 24px; width: 330px; height: 19.5px; border-bottom: 0.8px solid #dfe3e8;
+           font-size: 10.6px; line-height: 19.5px; color: #1e2532; }
+.toc-row .n { position: absolute; left: 13px; }
+.toc-row .t { position: absolute; left: 42px; }
+.toc-row .p { position: absolute; right: 6px; }
+.toc-note { position: absolute; background: #f1f4f8; border-radius: 6px; color: #1c2230; font-weight: 700;
+            font-size: 8.6px; line-height: 11.2px; padding: 9px 8px 0 14px; }
+
+/* ---------- 8. oldal: ajánlatkérő doboz ---------- */
+.cta-text { position: absolute; color: #fff; font-weight: 700; font-size: 13.8px; line-height: 17px; white-space: nowrap; letter-spacing: -0.1px; }
+.cta-btn { position: absolute; background: #fff; border-radius: 10px; color: var(--navy); font-weight: 700; font-size: 13.6px;
+           line-height: 32px; box-shadow: 0 1px 3px rgba(80,0,0,.35); }
+ul.chk.tight li { margin-bottom: 2.6px; }
